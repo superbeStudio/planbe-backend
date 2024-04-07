@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uuid")
-    val uuid: Long,
+    val uuid: Long? = null,
     @Column(name = "email")
     val email: String,
     @Column(name = "nickname")
@@ -17,13 +17,13 @@ class User(
     @Column(name = "sex")
     val sex: String,
     @Column(name = "age")
-    val age: String,
+    val age: Int,
     @Column(name = "pw")
-    val password: String,
+    var password: String,
     @Column(name = "currency_main")
-    val currencyMain: String,
+    var currencyMain: String,
     @Column(name = "mode_screen")
-    val modeScreen: String,
+    var modeScreen: String,
     @Column(name = "create_date")
     val createDate: LocalDateTime,
     @Column(name = "update_date")
