@@ -37,7 +37,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //test에서 assert사용
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.withType(KotlinCompile) {
