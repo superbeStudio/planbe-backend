@@ -15,3 +15,4 @@ spring:
     password: planbe123#
     hikari:
       connection-test-query: select 1 from dual
+

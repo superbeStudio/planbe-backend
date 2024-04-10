@@ -1,4 +1,4 @@
-package kr.co.fnf.serp.config
+package account.superbe.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,7 +23,6 @@ class SecurityConfig {
                 authorizeRequests ->
                     authorizeRequests
                         .requestMatchers("/**").permitAll()
-                        .anyRequest().permitAll()
             }
             .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
         http
