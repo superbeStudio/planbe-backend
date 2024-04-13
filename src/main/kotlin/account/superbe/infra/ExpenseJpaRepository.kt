@@ -1,6 +1,6 @@
-package account.superbe.infra.expense
+package account.superbe.infra
 
-import account.superbe.domain.model.expense.Expense
+import account.superbe.domain.model.Expense
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ExpenseJpaRepository : JpaRepository<Expense, Long> {

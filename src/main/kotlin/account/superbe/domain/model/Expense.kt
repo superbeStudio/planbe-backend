@@ -1,4 +1,4 @@
-package account.superbe.domain.model.expense
+package account.superbe.domain.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

@@ -1,9 +1,10 @@
 package account.superbe
 
-import account.superbe.domain.model.user.User
-import account.superbe.infra.expense.ExpenseJpaRepository
-import account.superbe.infra.goal.GoalJpaRepository
-import account.superbe.infra.user.UserJpaRepository
+import account.superbe.domain.model.Gen
+import account.superbe.domain.model.User
+import account.superbe.infra.ExpenseJpaRepository
+import account.superbe.infra.GoalJpaRepository
+import account.superbe.infra.UserJpaRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,9 +14,9 @@ import org.assertj.core.api.Assertions.assertThat
 
 @SpringBootTest
 class SuperbeApplicationTests (
-    @Autowired val userRepo: UserJpaRepository,
-    @Autowired val goalRepo: GoalJpaRepository,
-    @Autowired val expenseRepo: ExpenseJpaRepository
+        @Autowired val userRepo: UserJpaRepository,
+        @Autowired val goalRepo: GoalJpaRepository,
+        @Autowired val expenseRepo: ExpenseJpaRepository
 ){
 
     @Test
@@ -31,7 +32,7 @@ class SuperbeApplicationTests (
         val user = User(
                 email = "test@email.com",
                 nickname = "test",
-                sex = "W",
+                sex = Gen.F,
                 age = 20,
                 password = "test",
                 currencyMain = "won",
