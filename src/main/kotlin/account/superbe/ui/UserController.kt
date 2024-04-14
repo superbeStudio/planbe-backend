@@ -20,4 +20,9 @@ class UserController(private val userService: UserApplicationService) {
         val user = UserDto(email = data.email, password = data.password, nickname = data.nickname, sex = data.sex, age = data.age)
         return ResponseDto<Long>(data = userService.createUser(user));
     }
+
+    @GetMapping("/{userId}")
+    fun getUserInfo(@PathVariable userId: Long) : ResponseDto<UserDto> {
+        return ResponseDto(data = userService.getUserInfo(userId));
+    }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 class UserDto(
     val uuid: Long? = null,
     val email: String,
-    val password: String,
+    val password: String? = null,
     val nickname: String,
     val sex: Gen,
     val age: Int,
