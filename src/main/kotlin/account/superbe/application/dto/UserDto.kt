@@ -14,6 +14,11 @@ class UserDto(
     var currencyMain: String? = null,
     var modeScreen: String? = null,
     val createDate: LocalDateTime? = null,
-    var updateDate: LocalDateTime? = null
+    var updateDate: LocalDateTime? = null,
 ) {
+    class Login(
+        val email: String,
+        val password: String) {
+
+    }
 }

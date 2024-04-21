@@ -3,9 +3,9 @@ package account.superbe.ui
 import account.superbe.application.UserApplicationService
 import account.superbe.application.dto.UserDto
 import account.superbe.common.io.ResponseDto
+import account.superbe.ui.post.UserLoginDto
 import account.superbe.ui.post.UserPostRequest
 import lombok.RequiredArgsConstructor
-import lombok.extern.java.Log
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -27,5 +27,10 @@ class UserController() {
     @GetMapping("/{userId}")
     fun getUserInfo(@PathVariable userId: Long) : ResponseDto<UserDto> {
         return ResponseDto(data = userService.getUserInfo(userId));
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody data: UserDto.Login): ResponseDto<UserLoginDto> {
+        return ResponseDto<UserLoginDto> (data = userService.login(data))
     }
 }

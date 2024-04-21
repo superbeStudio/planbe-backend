@@ -16,3 +16,5 @@ spring:
     hikari:
       connection-test-query: select 1 from dual
 
+jwt:
+  secretKey: fjkapnodsflvnsdavkhwiensejdnvasknavevnksnddkvfndlsk

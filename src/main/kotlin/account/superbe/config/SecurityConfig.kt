@@ -1,5 +1,9 @@
 package account.superbe.config
 
+import account.superbe.domain.model.Role
+import account.superbe.security.JwtFilter
+import account.superbe.security.JwtTokenProvider
+import lombok.RequiredArgsConstructor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -9,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -17,7 +22,8 @@ import java.time.Duration
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+@RequiredArgsConstructor
+class SecurityConfig(private val jwtFilter: JwtFilter) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -26,6 +32,7 @@ class SecurityConfig {
                 authorizeRequests ->
                     authorizeRequests
                         .requestMatchers("/**").permitAll()
+                            .anyRequest().hasAnyRole("N")
             }
             .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
         http
@@ -33,7 +40,7 @@ class SecurityConfig {
                     headerConfig.frameOptions{frameOptions -> frameOptions.disable()}
                 }
                 .cors { corsConfigurationSource: CorsConfigurer<HttpSecurity?> -> corsConfigurationSource.configurationSource(corsConfigurationSource()) }
-
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 
