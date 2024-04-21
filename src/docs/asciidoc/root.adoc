@@ -1,0 +1,12 @@
+:snippets: build/generated-snippets
+
+=== root test api
+
+- http request
+include::{snippets}/root/http-request.adoc[]
+
+- http response
+include::{snippets}/root/http-response.adoc[]
+
+- response body
+include::{snippets}/root/response-body.adoc[]

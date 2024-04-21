@@ -6,6 +6,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.23'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.9.23'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.23'
+
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'account'
@@ -16,9 +18,7 @@ java {
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+    asciidoctorExt
 }
 
 repositories {
@@ -41,17 +41,59 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     //redis -> aws 개설안해서 일부 구현
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //    implementation 'org.springframework.session:spring-session-data-redis:2.6.1'
+
+    //spring restdocs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
-tasks.withType(KotlinCompile) {
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    // 다른 Task 에 의존한다는 것을 알리는 것이다.
+    // test Task 에 의존함을 알린다.
+    // asciidoctor task 를 실행할 때, test task 를 먼저 실행한다.
+    dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+tasks.register('copyDocument', Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    outputs.dir snippetsDir // spring restdocs
+}
+
+
+tasks.withType(KotlinCompile).configureEach {
     kotlinOptions {
         freeCompilerArgs += '-Xjsr305=strict'
         jvmTarget = '17'
     }
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from("${asciidoctor.outputDir}")
+        into 'src/main/resources/static/docs'
+    }
 }
