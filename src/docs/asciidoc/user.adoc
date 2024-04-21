@@ -1,0 +1,24 @@
+
+:snippets: build/generated-snippets
+
+=== user 생성
+
+- http request
+include::{snippets}/user/http-request.adoc[]
+
+- http response
+include::{snippets}/user/http-response.adoc[]
+
+- response body
+include::{snippets}/user/response-body.adoc[]
+
+=== user 조회
+
+- http request
+include::{snippets}/user-get/http-request.adoc[]
+
+- http response
+include::{snippets}/user-get/http-response.adoc[]
+
+- response body
+include::{snippets}/user-get/response-body.adoc[]
