@@ -1,6 +1,7 @@
 package account.superbe.application.dto
 
 import account.superbe.domain.model.Gen
+import lombok.EqualsAndHashCode
 import java.time.LocalDateTime
 
 class UserDto(

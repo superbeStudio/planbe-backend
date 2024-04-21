@@ -6,6 +6,7 @@ import account.superbe.common.io.ResponseDto
 import account.superbe.ui.post.UserPostRequest
 import lombok.RequiredArgsConstructor
 import lombok.extern.java.Log
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 @Validated
-class UserController(private val userService: UserApplicationService) {
+class UserController() {
+    @Autowired
+    private lateinit var userService: UserApplicationService
 
     @PostMapping
     fun createUser(@RequestBody data: UserPostRequest): ResponseDto<Long> {
