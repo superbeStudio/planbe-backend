@@ -1,6 +1,7 @@
 package account.superbe.application
 
 import account.superbe.application.dto.UserDto
+import account.superbe.common.client.TokenClient
 import account.superbe.domain.service.UserService
 import account.superbe.infra.UserFactory
 import account.superbe.infra.UserJpaRepository
@@ -25,8 +26,8 @@ class UserApplicationService (
         private val userFactory: UserFactory,
         private val userRepo: UserJpaRepository,
         private val passwordEncoder: PasswordEncoder,
-        private val authBuilder: AuthenticationManagerBuilder,
-        private val tokenProvider: JwtTokenProvider
+        private val tokenProvider: JwtTokenProvider,
+        private val tokenClient: TokenClient
 ){
     @Transactional
     fun createUser(user: UserDto) : Long{
@@ -56,13 +57,23 @@ class UserApplicationService (
         if (!passwordEncoder.matches(data.password, user.password)) {
             throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")
         }
-        val authenticationToken =
-                UsernamePasswordAuthenticationToken(user.email, data.password)
-
-        val authentication: Authentication =
-                authBuilder.getObject().authenticate(authenticationToken)
-
-        val generateToken = tokenProvider.generateToken(authentication)
+        val generateToken = tokenProvider.getAccessToken(user.email, data.password)
+        println(generateToken.refreshToken)
+        tokenClient.setValues(generateToken.refreshToken, user.email)
         return UserLoginDto(token = generateToken, email = user.email)
+    }
+
+    fun getAccessToken(refreshToken: String): TokenDto {
+        val email = tokenClient.getValues(refreshToken)
+        if(tokenProvider.isRefreshTokenExpired(refreshToken)) {
+            // TODO: 만료토큰 관리로직 추가 필요
+            throw IllegalArgumentException("만료된 토큰")
+        }
+        val user = userRepo.findByEmail(email)
+                .orElseThrow { throw IllegalArgumentException("없는 이메일정보입니다.") }
+
+        val generateToken = tokenProvider.getAccessToken(user.email, user.password)
+        tokenClient.setValues(generateToken.refreshToken, user.email)
+        return TokenDto(refreshToken = refreshToken, accessToken = generateToken.accessToken)
     }
 }

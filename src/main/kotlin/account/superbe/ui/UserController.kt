@@ -3,6 +3,7 @@ package account.superbe.ui
 import account.superbe.application.UserApplicationService
 import account.superbe.application.dto.UserDto
 import account.superbe.common.io.ResponseDto
+import account.superbe.security.TokenDto
 import account.superbe.ui.post.UserLoginDto
 import account.superbe.ui.post.UserPostRequest
 import lombok.RequiredArgsConstructor
@@ -32,5 +33,10 @@ class UserController() {
     @PostMapping("/login")
     fun login(@RequestBody data: UserDto.Login): ResponseDto<UserLoginDto> {
         return ResponseDto<UserLoginDto> (data = userService.login(data))
+    }
+
+    @PostMapping("/refresh")
+    fun getAccessToken(@RequestBody token: TokenDto): ResponseDto<TokenDto> {
+        return ResponseDto<TokenDto>(data = userService.getAccessToken(token.refreshToken))
     }
 }

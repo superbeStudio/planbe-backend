@@ -10,7 +10,7 @@
 ////@Component
 //class RedisClient (val redisTemplate: RedisTemplate<String, String>){
 //
-//    fun setValues(token: String, id: String) {
+//    fun setValues(token: String, email: String) {
 //        val values: ValueOperations<String, String> = redisTemplate.opsForValue()
 //        values.set(token, id, Duration.ofMinutes(60 * 24 * 24)) //3분뒤 메모리에서 삭제
 //    }

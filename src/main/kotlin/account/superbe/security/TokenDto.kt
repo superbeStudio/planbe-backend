@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor
 @Builder
 class TokenDto(val grantType: String? = "Bearer",
               val refreshToken: String,
-              val accessToken: String
+              val accessToken: String? = null
 ) {
 }

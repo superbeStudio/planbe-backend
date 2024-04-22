@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component
 
 import io.jsonwebtoken.io.Decoders.BASE64
 import io.jsonwebtoken.security.Keys
+import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -16,7 +18,11 @@ import java.security.Key
 import java.util.*
 import java.util.stream.Collectors
 @Component
-class JwtTokenProvider(@Value("\${jwt.secretKey}") secretKey: String) {
+@RequiredArgsConstructor
+class JwtTokenProvider(
+        @Value("\${jwt.secretKey}") secretKey: String,
+        private val authBuilder: AuthenticationManagerBuilder
+) {
     private lateinit var key: Key
     private val tokenExpireMinutes = 60 //토근 만료시간 (현재 일주일)
     private val refreshExpireMinutes = 60 * 24 * 24 //리프레쉬 토큰 만료시간(현재 한달) 자동로그인도 풀리는경우
@@ -78,11 +84,21 @@ class JwtTokenProvider(@Value("\${jwt.secretKey}") secretKey: String) {
         return false
     }
 
-    fun isRefreshTokenExpired(refreshToken: String?): Boolean {
+    fun isRefreshTokenExpired(refreshToken: String): Boolean {
         val claims: Claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken).getBody()
 
         val expiration: Date = claims.expiration
 
         return expiration.before(Date())
+    }
+
+    fun getAccessToken(email: String, password: String): TokenDto {
+        val authenticationToken =
+                UsernamePasswordAuthenticationToken(email, password)
+
+        val authentication: Authentication =
+                authBuilder.getObject().authenticate(authenticationToken)
+
+        return generateToken(authentication)
     }
 }
