@@ -6,7 +6,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "token")
 class Token(
-        @Id @GeneratedValue(strategy = GenerationType.UUID)
+        @Id
         @Column(name = "token")
         val refreshToken: String,
         @Column(name = "email")

@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.security.Key
 import java.util.*
 import java.util.stream.Collectors
@@ -101,4 +103,5 @@ class JwtTokenProvider(
 
         return generateToken(authentication)
     }
+
 }

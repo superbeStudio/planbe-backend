@@ -57,8 +57,7 @@ class UserApplicationService (
         if (!passwordEncoder.matches(data.password, user.password)) {
             throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")
         }
-        val generateToken = tokenProvider.getAccessToken(user.email, data.password)
-        println(generateToken.refreshToken)
+        val generateToken = tokenProvider.getAccessToken(user.email, user.password)
         tokenClient.setValues(generateToken.refreshToken, user.email)
         return UserLoginDto(token = generateToken, email = user.email)
     }

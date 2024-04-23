@@ -51,7 +51,7 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL)
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL)
 
-        corsConfiguration.setAllowedOrigins(listOf("/**"))
+        corsConfiguration.allowedOrigins = listOf("/**", "http://localhost:3000")
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration)
 
         corsConfiguration.allowCredentials = true

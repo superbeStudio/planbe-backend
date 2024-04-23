@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service
 @Service
 @RequiredArgsConstructor
 class CustomUserDetailService(
-        private val userRepo: UserJpaRepository
+        private val userRepo: UserJpaRepository,
+        private val passwordEncoder: PasswordEncoder
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user: account.superbe.domain.model.User = userRepo.findByEmail(username).orElseThrow { throw IllegalArgumentException() }
+        user.password = passwordEncoder.encode(user.password)
         return UserDetailsImpl(user)
     }
 }
