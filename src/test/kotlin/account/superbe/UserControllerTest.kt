@@ -5,6 +5,7 @@ import account.superbe.application.dto.UserDto
 import account.superbe.common.io.ResponseDto
 import account.superbe.domain.model.Gen
 import account.superbe.infra.UserJpaRepository
+import account.superbe.security.refresh_token.TokenRepository
 import account.superbe.ui.UserController
 import account.superbe.ui.post.UserPostRequest
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -41,6 +42,7 @@ class UserControllerTest (
     @SpyBean private lateinit var userController: UserController
     @MockBean private lateinit var userService: UserApplicationService
     @MockBean private lateinit var userJpaRepository: UserJpaRepository
+    @MockBean private lateinit var tokenRepository: TokenRepository
 
     private val objectMapper: ObjectMapper = ObjectMapper()
     private val user: UserPostRequest = UserPostRequest (email = "test@email.com", password = "test123", nickname= "test", sex = Gen.F, age= 32)
