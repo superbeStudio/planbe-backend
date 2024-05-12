@@ -28,6 +28,7 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
+import java.util.*
 
 
 @WebMvcTest(UserController::class)
@@ -76,7 +77,7 @@ class UserControllerTest (
 
     @Test
     fun getUser() {
-        val userId = 1L
+        val userId = UUID.randomUUID()
         val userDto = UserDto(
                 uuid = userId,
                 email = "test@example.com",
