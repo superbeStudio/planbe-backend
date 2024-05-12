@@ -2,9 +2,10 @@ package account.superbe.infra
 
 import account.superbe.domain.model.User
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.Optional
+import java.util.*
 
 interface UserJpaRepository : JpaRepository<User, Long>{
     fun existsByEmail(email: String): Boolean
     fun findByEmail(email: String): Optional<User>
+    fun findByUuid(userId: UUID): Optional<User>
 }

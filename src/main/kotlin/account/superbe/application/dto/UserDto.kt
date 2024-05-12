@@ -3,9 +3,10 @@ package account.superbe.application.dto
 import account.superbe.domain.model.Gen
 import lombok.EqualsAndHashCode
 import java.time.LocalDateTime
+import java.util.UUID
 
 class UserDto(
-    val uuid: Long? = null,
+    val uuid: UUID? = null,
     val email: String,
     val password: String? = null,
     val nickname: String,

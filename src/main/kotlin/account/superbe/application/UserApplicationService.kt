@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 
 @Service
@@ -30,7 +31,7 @@ class UserApplicationService (
         private val tokenClient: TokenClient
 ){
     @Transactional
-    fun createUser(user: UserDto) : Long{
+    fun createUser(user: UserDto) : UUID{
         val user = userFactory.create(user)
         if(userService.existsEmail(user)) {
             throw IllegalArgumentException("이미 등록된 이메일입니다.")
@@ -39,8 +40,8 @@ class UserApplicationService (
         return user.uuid!!
     }
 
-    fun getUserInfo(userId: Long) : UserDto{
-        val user = userRepo.findByIdOrNull(userId) ?: throw IllegalArgumentException("잘못된 유저 아이디를 입력하셨습니다.")
+    fun getUserInfo(userId: UUID) : UserDto{
+        val user = userRepo.findByUuid(userId).orElseThrow {  throw IllegalArgumentException("잘못된 유저 아이디를 입력하셨습니다.") }
         return UserDto(uuid = user.uuid,
             email = user.email,
             nickname = user.nickname,
