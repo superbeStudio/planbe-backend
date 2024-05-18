@@ -4,6 +4,7 @@ import account.superbe.application.UserApplicationService
 import account.superbe.application.dto.UserDto
 import account.superbe.common.io.ResponseDto
 import account.superbe.domain.model.Gen
+import account.superbe.infra.GoalJpaRepository
 import account.superbe.infra.UserJpaRepository
 import account.superbe.security.refresh_token.TokenRepository
 import account.superbe.ui.UserController
@@ -44,6 +45,7 @@ class UserControllerTest (
     @MockBean private lateinit var userService: UserApplicationService
     @MockBean private lateinit var userJpaRepository: UserJpaRepository
     @MockBean private lateinit var tokenRepository: TokenRepository
+    @MockBean private lateinit var goalJpaRepository: GoalJpaRepository
 
     private val objectMapper: ObjectMapper = ObjectMapper()
     private val user: UserPostRequest = UserPostRequest (email = "test@email.com", password = "test123", nickname= "test", sex = Gen.F, age= 32)

@@ -1,6 +1,7 @@
 package account.superbe
 
 import account.superbe.application.UserApplicationService
+import account.superbe.infra.GoalJpaRepository
 import account.superbe.infra.UserJpaRepository
 import account.superbe.security.refresh_token.TokenRepository
 import account.superbe.ui.RootController
@@ -33,6 +34,8 @@ internal class RootControllerTest(
     private lateinit var userJpaRepository: UserJpaRepository
     @MockBean
     private lateinit var tokenRepository: TokenRepository
+    @MockBean
+    private lateinit var goalJpaRepository: GoalJpaRepository
     
     @Test
     @Throws(Exception::class)
