@@ -20,7 +20,7 @@ import java.util.UUID
 @RequiredArgsConstructor
 @Validated
 class UserController(private val userService: UserApplicationService) {
-    val log: Logger = LoggerFactory.getLogger(UserApplicationService::class.java)
+    val log: Logger = LoggerFactory.getLogger(UserController::class.java)
 
     @PostMapping
     fun createUser(@RequestBody data: UserPostRequest): ResponseDto<Long> {
