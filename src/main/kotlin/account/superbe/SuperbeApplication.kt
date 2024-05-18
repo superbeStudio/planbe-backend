@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.annotations.servers.Server
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Configuration
 
 @OpenAPIDefinition(
         info = Info(title = "PLANBE API 명세서",
@@ -19,7 +18,9 @@ import org.springframework.context.annotation.Configuration
                         name = "superbe",
                         email = "superbestudio@gmail.com"
                 )
-        )
+        ),
+        servers = [Server(url = "/", description = "hosted url")],
+        security = [SecurityRequirement(name = "Api-Token")]
 )
 @SecurityScheme(type = SecuritySchemeType.APIKEY, `in` = SecuritySchemeIn.HEADER, name = "Api-Token", description = "Auth Token")
 @SpringBootApplication
