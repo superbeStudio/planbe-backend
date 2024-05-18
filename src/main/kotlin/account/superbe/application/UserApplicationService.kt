@@ -13,6 +13,8 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @Service
@@ -25,13 +27,17 @@ class UserApplicationService (
         private val tokenProvider: JwtTokenProvider,
         private val tokenClient: TokenClient
 ){
+    val log: Logger = LoggerFactory.getLogger(UserApplicationService::class.java)
+
     @Transactional
-    fun createUser(user: UserDto) : Long{
-        val user = userFactory.create(user)
+    fun createUser(data: UserDto) : Long{
+        val user = userFactory.create(data)
         if(userService.existsEmail(user)) {
+            log.info("[createUser] 회원가입 실패, 중복 email = {}", data.email)
             throw IllegalArgumentException("이미 등록된 이메일입니다.")
         }
         userRepo.save(user)
+        log.info("[createUser] 회원가입 성공 PK = {}", user.seq)
         return user.seq!!
     }
 
@@ -53,6 +59,7 @@ class UserApplicationService (
     fun login(data: UserDto.Login): UserLoginDto {
         val user = userRepo.findByEmail(data.email).orElseThrow {throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")}
         if (!passwordEncoder.matches(data.password, user.password)) {
+            log.info("[login] 로그인 실패 = {}", data.email)
             throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")
         }
         val generateToken = tokenProvider.getAccessToken(user.email, data.password, user)
@@ -65,10 +72,14 @@ class UserApplicationService (
         val email = tokenClient.getValues(refreshToken)
         if(tokenProvider.isRefreshTokenExpired(refreshToken)) {
             // TODO: 만료토큰 관리로직 추가 필요
+            log.info("[getAccessToken] 만료된 refresh 토큰 = {}", refreshToken)
             throw IllegalArgumentException("만료된 토큰")
         }
         val user = userRepo.findByEmail(email)
-                .orElseThrow { throw IllegalArgumentException("없는 이메일정보입니다.") }
+                .orElseThrow {
+                    log.info("[getAccessToken] refresh 토큰의 유저 정보가 존재하지않음 = {}", email)
+                    throw IllegalArgumentException("refresh 토큰의 유저 정보가 존재하지않습니다.")
+                }
 
         val generateToken = tokenProvider.getAccessToken(user.email, user.password, null)
         tokenClient.setValues(generateToken.refreshToken, user.email)

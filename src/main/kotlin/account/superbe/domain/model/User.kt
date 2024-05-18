@@ -29,7 +29,7 @@ class User(
         val createDate: LocalDateTime = LocalDateTime.now(),
         @Column(name = "update_date")
         var updateDate: LocalDateTime = LocalDateTime.now(),
-        @Enumerated(value = EnumType.STRING) //설정안하면 enum이 저장된 위치로 DB에 저장됨. enum순서가 틀어지면 DB가 꼬일 가능성이 있어서 순서로 저장하는것은 권장하는 방법이 아님
+        @Enumerated(value = EnumType.STRING)
         @Column(name="mi_role") var role: Role,
         @Column(name = "uuid")
         var uuid: UUID? = UUID.randomUUID()
