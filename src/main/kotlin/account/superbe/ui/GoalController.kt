@@ -7,14 +7,16 @@ import account.superbe.ui.post.GoalPostRequest
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import lombok.RequiredArgsConstructor
-import org.springframework.stereotype.Controller
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
-@RequestMapping("/api/goal")
+@RestController
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Validated
 class GoalController (private val goalService: GoalApplicationService){
     val log: Logger = LoggerFactory.getLogger(GoalController::class.java)
     @PostMapping

@@ -7,13 +7,10 @@ import account.superbe.security.TokenDto
 import account.superbe.ui.post.UserLoginDto
 import account.superbe.ui.post.UserPostRequest
 import lombok.RequiredArgsConstructor
-import org.aspectj.apache.bcel.classfile.JavaClass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import java.util.UUID
 
 @RestController
 @RequestMapping("/api/user")
