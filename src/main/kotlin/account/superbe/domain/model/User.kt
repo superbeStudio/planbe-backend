@@ -8,7 +8,7 @@ import java.util.UUID
 @Table(name = "user_info")
 class User(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "uuid", nullable = false)
+        @Column(name = "seq", nullable = false)
         val seq: Long? = null,
         @Column(name = "email", nullable = false)
         val email: String,

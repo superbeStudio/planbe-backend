@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 class UserDto(
-    val uuid: UUID? = null,
+    val seq: Long? = null,
     val email: String,
     val password: String? = null,
     val nickname: String,

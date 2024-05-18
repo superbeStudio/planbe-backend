@@ -8,16 +8,11 @@ import account.superbe.infra.UserJpaRepository
 import account.superbe.security.JwtTokenProvider
 import account.superbe.security.TokenDto
 import account.superbe.ui.post.UserLoginDto
-import jakarta.transaction.Transactional
 import lombok.RequiredArgsConstructor
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.UUID
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
@@ -31,18 +26,19 @@ class UserApplicationService (
         private val tokenClient: TokenClient
 ){
     @Transactional
-    fun createUser(user: UserDto) : UUID{
+    fun createUser(user: UserDto) : Long{
         val user = userFactory.create(user)
         if(userService.existsEmail(user)) {
             throw IllegalArgumentException("이미 등록된 이메일입니다.")
         }
         userRepo.save(user)
-        return user.uuid!!
+        return user.seq!!
     }
 
-    fun getUserInfo(userId: UUID) : UserDto{
-        val user = userRepo.findByUuid(userId).orElseThrow {  throw IllegalArgumentException("잘못된 유저 아이디를 입력하셨습니다.") }
-        return UserDto(uuid = user.uuid,
+    @Transactional
+    fun getUserInfo(userId: Long) : UserDto{
+        val user = userRepo.findByIdOrNull(userId) ?: throw IllegalArgumentException("잘못된 유저 아이디를 입력하셨습니다.")
+        return UserDto(seq = user.seq,
             email = user.email,
             nickname = user.nickname,
             sex = user.sex,
@@ -53,16 +49,18 @@ class UserApplicationService (
             updateDate= user.updateDate)
     }
 
+    @Transactional(readOnly = true)
     fun login(data: UserDto.Login): UserLoginDto {
         val user = userRepo.findByEmail(data.email).orElseThrow {throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")}
         if (!passwordEncoder.matches(data.password, user.password)) {
             throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")
         }
-        val generateToken = tokenProvider.getAccessToken(user.email, user.password)
+        val generateToken = tokenProvider.getAccessToken(user.email, data.password, user)
         tokenClient.setValues(generateToken.refreshToken, user.email)
         return UserLoginDto(token = generateToken, email = user.email)
     }
 
+    @Transactional(readOnly = true)
     fun getAccessToken(refreshToken: String): TokenDto {
         val email = tokenClient.getValues(refreshToken)
         if(tokenProvider.isRefreshTokenExpired(refreshToken)) {
@@ -72,7 +70,7 @@ class UserApplicationService (
         val user = userRepo.findByEmail(email)
                 .orElseThrow { throw IllegalArgumentException("없는 이메일정보입니다.") }
 
-        val generateToken = tokenProvider.getAccessToken(user.email, user.password)
+        val generateToken = tokenProvider.getAccessToken(user.email, user.password, null)
         tokenClient.setValues(generateToken.refreshToken, user.email)
         return TokenDto(refreshToken = refreshToken, accessToken = generateToken.accessToken)
     }

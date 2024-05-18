@@ -19,7 +19,7 @@ class CustomUserDetailService(
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user: account.superbe.domain.model.User = userRepo.findByEmail(username).orElseThrow { throw IllegalArgumentException() }
-        user.password = passwordEncoder.encode(user.password)
-        return UserDetailsImpl(user)
+        val result = UserDetailsImpl(user);
+        return result
     }
 }
