@@ -77,9 +77,9 @@ class UserControllerTest (
 
     @Test
     fun getUser() {
-        val userId = UUID.randomUUID()
+        val userId = 1L;
         val userDto = UserDto(
-                uuid = userId,
+                seq = userId,
                 email = "test@example.com",
                 nickname = "test_user",
                 sex = Gen.M,
@@ -105,7 +105,7 @@ class UserControllerTest (
                                 fieldWithPath("time").type(JsonFieldType.STRING).description("응답 시간"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메시지").optional(),
                                 fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터").optional(),
-                                fieldWithPath("data.uuid").type(JsonFieldType.NUMBER).description("사용자 PK"),
+                                fieldWithPath("data.seq").type(JsonFieldType.NUMBER).description("사용자 PK"),
                                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
                                 fieldWithPath("data.password").type(JsonFieldType.STRING).description("비밀번호").optional(),
                                 fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("닉네임"),
