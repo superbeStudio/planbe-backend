@@ -17,8 +17,8 @@ class UserService(private val userRepo: UserJpaRepository, private val userFacto
     fun getUserByEmailNonNull(email: String): UserDto {
         val user = userRepo.findByEmail(email).orElseThrow { throw IllegalArgumentException("로그인 정보를 다시 확인해주세요") }
         log.info("[getUserByEmailNonNull] email = {}", email)
-        return UserDto(email = user.email, nickname = user.nickname, sex = user.sex, birth = user.birth,
-                userSeq = user.userSequence)
+        return UserDto(email = user.email, password = user.password, nickname = user.nickname, sex = user.sex,
+                birth = user.birth, userSeq = user.userSequence)
     }
 
     @Transactional

@@ -6,3 +6,5 @@ spring:
     url: jdbc:mysql://planbe-db.c3eaees6c18e.ap-northeast-2.rds.amazonaws.com/planbe
     username: superbe
     password: planbe123#
+server:
+  shutdown: graceful
