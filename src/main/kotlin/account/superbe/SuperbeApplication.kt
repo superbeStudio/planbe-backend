@@ -19,7 +19,7 @@ import org.springframework.boot.runApplication
                         email = "superbestudio@gmail.com"
                 )
         ),
-        servers = [Server(url = "/", description = "hosted url"), Server(url = "https://planbe-backend.p-e.kr/", description = "dev 서버")]
+        servers = [Server(url = "https://planbe-backend.p-e.kr/", description = "dev 서버")]
 )
 @SecurityScheme(
         name = "bearerAuth",
