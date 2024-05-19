@@ -1,5 +1,5 @@
 package account.superbe.domain.model
 
 enum class Role {
-    N
+    ROLE_N
 }

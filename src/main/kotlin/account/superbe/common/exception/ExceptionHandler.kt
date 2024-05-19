@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class ExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
-    fun handleBizException(e: Exception): ResponseEntity<ResponseDto<Nothing?>> {
+    fun handleBizException(e: Exception): ResponseEntity<ResponseDto<Nothing>> {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ResponseDto(message = e.message))

@@ -2,7 +2,6 @@ package account.superbe.config
 
 import account.superbe.domain.model.Role
 import account.superbe.security.JwtFilter
-import account.superbe.security.JwtTokenProvider
 import lombok.RequiredArgsConstructor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -31,7 +30,7 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
             .authorizeHttpRequests {
                 authorizeRequests ->
                     authorizeRequests
-                        .requestMatchers("/**", "/swagger-ui/*").permitAll()
+                        .requestMatchers("/api/user/login", "/api/user","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             .anyRequest().hasAnyRole("N")
             }
             .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }

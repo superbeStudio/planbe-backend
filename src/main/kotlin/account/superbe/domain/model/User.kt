@@ -9,7 +9,7 @@ import java.util.UUID
 class User(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "seq", nullable = false)
-        val seq: Long? = null,
+        val userSequence: Long? = null,
         @Column(name = "email", nullable = false)
         val email: String,
         @Column(name = "nickname", nullable = false)
@@ -30,7 +30,7 @@ class User(
         @Column(name = "update_date")
         var updateDate: LocalDateTime = LocalDateTime.now(),
         @Enumerated(value = EnumType.STRING)
-        @Column(name="mi_role") var role: Role,
+        @Column(name="role") var role: Role,
         @Column(name = "uuid")
         var uuid: UUID? = UUID.randomUUID()
 ) {

@@ -92,7 +92,7 @@ class JwtTokenProvider(
         return expiration.before(Date())
     }
 
-    fun getAccessToken(email: String, password: String, user:account.superbe.domain.model.User?): TokenDto {
+    fun getAccessToken(email: String, password: String): TokenDto {
         val authenticationToken =
                 UsernamePasswordAuthenticationToken(email, password)
 

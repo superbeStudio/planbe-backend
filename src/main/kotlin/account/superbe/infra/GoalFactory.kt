@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GoalFactory {
-    fun create(data: GoalDto): Goal {
+    fun create(data: GoalDto, userSequence: Long): Goal {
         return Goal(goalName = data.goalName, goalCategory = data.goalCategory, goalAmount = data.goalAmount,
-                priority = data.priority, goalTime = data.goalTime, goalUrl = data.goalUrl)
+                priority = data.priority, goalTime = data.goalTime, goalUrl = data.goalUrl, userSequence = userSequence)
     }
 }

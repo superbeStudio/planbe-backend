@@ -14,8 +14,8 @@ import java.util.UUID
 @Table(name = "goal_info")
 class Goal (
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "seq")
-        val seq: Long? = null,
+        @Column(name = "goal_seq")
+        val goalSequence: Long? = null,
         @Column(name = "goal_name")
         var goalName: String,
         @Column(name = "goal_category")
@@ -33,6 +33,8 @@ class Goal (
         @Column(name = "update_datetime")
         var updateDatetime: LocalDateTime = LocalDateTime.now(),
         @Column(name = "uuid")
-        val uuid: UUID? = UUID.randomUUID()
+        val uuid: UUID? = UUID.randomUUID(),
+        @Column(name = "user_seq")
+        val userSequence: Long
 ){
 }

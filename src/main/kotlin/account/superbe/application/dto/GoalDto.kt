@@ -2,10 +2,9 @@ package account.superbe.application.dto
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 
 class GoalDto(
-        val seq: Long? = null,
+        val goalSequence: Long? = null,
         var goalName: String,
         var goalCategory: String,
         var goalAmount: Int,
