@@ -1,6 +1,7 @@
 package account.superbe.domain.model
 
 import jakarta.persistence.*
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -17,8 +18,8 @@ class User(
         @Column(name = "sex", nullable = false)
         @Enumerated(EnumType.STRING)
         val sex: Gen,
-        @Column(name = "age", nullable = false)
-        val age: Int,
+        @Column(name = "birth", nullable = false)
+        val birth: LocalDate,
         @Column(name = "pw")
         var password: String,
         @Column(name = "currency_main")

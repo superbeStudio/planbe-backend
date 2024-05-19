@@ -25,7 +25,8 @@ class GoalController (private val goalAppService: GoalApplicationService, privat
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun createGoal(@RequestBody data: GoalPostRequest, @AuthenticationPrincipal user: UserDetails) : ResponseDto<Long>{
         log.info("[createGoal] 목표 생성 user seq = {}", user.username)
-        val goalDto = GoalDto(goalName = data.goalName, goalCategory = data.goalCategory, goalAmount = data.goalAmount, priority = data.priority, goalTime = data.goalTime, goalUrl = data.goalUrl)
+        val goalDto = GoalDto(goalName = data.goalName, goalCategory = data.goalCategory, goalAmount = data.goalAmount,
+                priority = data.priority, goalTime = data.goalTime, goalUrl = data.goalUrl)
         return ResponseDto(data = goalAppService.createGoal(goalDto, user.username));
     }
 
@@ -41,5 +42,21 @@ class GoalController (private val goalAppService: GoalApplicationService, privat
     fun getGoals(@AuthenticationPrincipal user: UserDetails): ResponseDto<List<GoalDto>> {
         log.info("[getGoals] 목표 상세 조회. userEmail = {}", user.username)
         return ResponseDto(data = goalAppService.getGoals(user.username))
+    }
+
+    @DeleteMapping("/{goalSeq}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")])
+    fun deleteGoal(@PathVariable goalSeq: Long, @AuthenticationPrincipal user: UserDetails): ResponseDto<Nothing> {
+        log.info("[deleteGoal] 목표 삭제 PK = {}, email = {}", goalSeq, user.username)
+        goalAppService.deleteGoal(goalSeq, user.username)
+        return ResponseDto()
+    }
+
+    @PostMapping("/update/{goalSeq}")
+    @Operation(security = [SecurityRequirement(name = "bearerAuth")])
+    fun updateGoalInfo(@PathVariable goalSeq: Long, @AuthenticationPrincipal user: UserDetails, @RequestBody data: GoalPostRequest.Update): ResponseDto<Nothing> {
+        log.info("[updateGoalInfo] 목표 정보 수정. PK = {}, email = {}", goalSeq, user.username)
+        goalAppService.updateGoalInfo(goalSeq, user.username, data.goalName, data.goalCategory, data.goalAmount, data.priority, data.goalTime, data.goalUrl)
+        return ResponseDto()
     }
 }

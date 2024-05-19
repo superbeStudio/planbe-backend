@@ -1,7 +1,6 @@
 package account.superbe.domain.service
 
 import account.superbe.application.dto.UserDto
-import account.superbe.domain.model.User
 import account.superbe.infra.UserFactory
 import account.superbe.infra.UserJpaRepository
 import lombok.RequiredArgsConstructor
@@ -19,7 +18,7 @@ class UserService(private val userRepo: UserJpaRepository, private val userFacto
         val user = userRepo.findByEmail(email).orElseThrow { throw IllegalArgumentException("로그인 정보를 다시 확인해주세요") }
         log.info("[getUserByEmailNonNull] email = {}", email)
         return UserDto(email = user.email, password = user.password, nickname = user.nickname, sex = user.sex,
-                age = user.age, userSeq = user.userSequence)
+                birth = user.birth, userSeq = user.userSequence)
     }
 
     @Transactional

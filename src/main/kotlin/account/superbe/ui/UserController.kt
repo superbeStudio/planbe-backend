@@ -27,7 +27,7 @@ class UserController(private val userAppService: UserApplicationService, private
     @PostMapping
     fun createUser(@RequestBody data: UserPostRequest): ResponseDto<Long> {
         log.info("[createUser] 회원가입 email = {}", data.email)
-        val user = UserDto(email = data.email, password = data.password, nickname = data.nickname, sex = data.sex, age = data.age)
+        val user = UserDto(email = data.email, password = data.password, nickname = data.nickname, sex = data.sex, birth = data.birth)
         return ResponseDto<Long>(data = UserService.createUser(user));
     }
 
@@ -41,9 +41,9 @@ class UserController(private val userAppService: UserApplicationService, private
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody data: UserDto.Login): ResponseDto<UserLoginDto> {
+    fun login(@RequestBody data: UserPostRequest.Login): ResponseDto<UserLoginDto> {
         log.info("[login] 로그인 email = {}", data.email)
-        return ResponseDto<UserLoginDto> (data = userAppService.login(data))
+        return ResponseDto<UserLoginDto> (data = userAppService.login(data.email, data.password))
     }
 
     @PostMapping("/refresh")

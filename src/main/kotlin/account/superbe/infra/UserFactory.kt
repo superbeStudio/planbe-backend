@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service
 class UserFactory(private val passwordEncoder: PasswordEncoder) {
     fun create(user: UserDto): User{
         val encodePassword = passwordEncoder.encode(user.password);
-        return User(email = user.email, password = encodePassword, age = user.age, sex = user.sex, nickname = user.nickname, role = Role.ROLE_N)
+        return User(email = user.email, password = encodePassword, birth = user.birth, sex = user.sex, nickname = user.nickname, role = Role.ROLE_N)
     }
 }

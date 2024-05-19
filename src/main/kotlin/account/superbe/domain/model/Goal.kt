@@ -6,8 +6,11 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.springframework.util.StringUtils
+import org.springframework.util.StringUtils.*
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.Objects
 import java.util.UUID
 
 @Entity
@@ -37,4 +40,21 @@ class Goal (
         @Column(name = "user_seq")
         val userSequence: Long
 ){
+        fun updateData(
+                goalName: String?, goalCategory: String?, goalAmount: Int?, priority: Int?, goalTime: LocalDate?,
+                goalUrl: String?
+        ) {
+                if(hasText(goalName)) {
+                        this.goalName = goalName!!
+                }
+                if(hasText(goalCategory)) {
+                        this.goalCategory = goalCategory!!
+                }
+                if(hasText(goalUrl)) {
+                        this.goalUrl = goalUrl!!
+                }
+                goalAmount?.also { this.goalAmount = it }
+                priority?.also { this.priority = it }
+                goalTime?.also { this.goalTime = it }
+        }
 }

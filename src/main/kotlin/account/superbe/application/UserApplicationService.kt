@@ -29,13 +29,13 @@ class UserApplicationService (
     val log: Logger = LoggerFactory.getLogger(UserApplicationService::class.java)
 
     @Transactional(readOnly = true)
-    fun login(data: UserDto.Login): UserLoginDto {
-        val user = userService.getUserByEmailNonNull(data.email)
-        if (!passwordEncoder.matches(data.password, user.password)) {
-            log.info("[login] 로그인 실패 = {}", data.email)
+    fun login(email: String, password: String): UserLoginDto {
+        val user = userService.getUserByEmailNonNull(email)
+        if (!passwordEncoder.matches(password, user.password)) {
+            log.info("[login] 로그인 실패 = {}", email)
             throw IllegalArgumentException("로그인 정보를 다시 확인해주세요")
         }
-        val generateToken = tokenProvider.getAccessToken(user.email, data.password)
+        val generateToken = tokenProvider.getAccessToken(user.email, password)
         tokenClient.setValues(generateToken.refreshToken, user.email)
         return UserLoginDto(token = generateToken, email = user.email)
     }

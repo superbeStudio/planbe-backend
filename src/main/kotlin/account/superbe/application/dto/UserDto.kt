@@ -1,6 +1,7 @@
 package account.superbe.application.dto
 
 import account.superbe.domain.model.Gen
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class UserDto(
@@ -9,15 +10,10 @@ class UserDto(
         val password: String? = null,
         val nickname: String,
         val sex: Gen,
-        val age: Int,
+        val birth: LocalDate,
         var currencyMain: String? = null,
         var modeScreen: String? = null,
         val createDate: LocalDateTime? = null,
         var updateDate: LocalDateTime? = null,
 ) {
-    class Login(
-        val email: String,
-        val password: String) {
-
-    }
 }
