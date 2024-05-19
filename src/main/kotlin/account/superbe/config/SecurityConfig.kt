@@ -31,7 +31,7 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
             .authorizeHttpRequests {
                 authorizeRequests ->
                     authorizeRequests
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/**", "/swagger-ui/*").permitAll()
                             .anyRequest().hasAnyRole("N")
             }
             .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
