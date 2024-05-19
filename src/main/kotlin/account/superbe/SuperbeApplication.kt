@@ -19,10 +19,14 @@ import org.springframework.boot.runApplication
                         email = "superbestudio@gmail.com"
                 )
         ),
-        servers = [Server(url = "/", description = "hosted url")],
-        security = [SecurityRequirement(name = "Api-Token")]
+        servers = [Server(url = "/", description = "hosted url"), Server(url = "https://planbe-backend.p-e.kr/", description = "dev 서버")]
 )
-@SecurityScheme(type = SecuritySchemeType.APIKEY, `in` = SecuritySchemeIn.HEADER, name = "Api-Token", description = "Auth Token")
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 @SpringBootApplication
 class SuperbeApplication
 
