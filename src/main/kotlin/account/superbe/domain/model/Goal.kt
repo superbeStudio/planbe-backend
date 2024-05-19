@@ -56,5 +56,6 @@ class Goal (
                 goalAmount?.also { this.goalAmount = it }
                 priority?.also { this.priority = it }
                 goalTime?.also { this.goalTime = it }
+                this.updateDatetime = LocalDateTime.now()
         }
 }
