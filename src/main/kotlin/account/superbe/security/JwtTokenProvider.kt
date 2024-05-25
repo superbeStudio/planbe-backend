@@ -4,6 +4,8 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders.BASE64
 import io.jsonwebtoken.security.Keys
 import lombok.RequiredArgsConstructor
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -23,6 +25,7 @@ class JwtTokenProvider(
         @Value("\${jwt.secretKey}") secretKey: String,
         private val authBuilder: AuthenticationManagerBuilder
 ) {
+    val log: Logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
     private lateinit var key: Key
     private val tokenExpireMinutes = 60 //토근 만료시간 (현재 일주일)
     private val refreshExpireMinutes = 60 * 24 * 24 //리프레쉬 토큰 만료시간(현재 한달) 자동로그인도 풀리는경우
@@ -66,20 +69,22 @@ class JwtTokenProvider(
         }
     }
 
-    fun validateToken(token: String?): Boolean { //토큰이 유효한지 검사
+    fun validateToken(token: String): Boolean { //토큰이 유효한지 검사
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
             return true
         } catch (e: SecurityException) {
-            println("Invalid JWT Token$e") //등록안됨
+            log.info("Invalid JWT Token$e") //등록안됨
         } catch (e: MalformedJwtException) {
-            println("Invalid JWT Token$e")
+            log.info("Invalid JWT Token$e")
         } catch (e: ExpiredJwtException) {
-            println("Expired JWT Token$e")
+            log.info("Expired JWT Token$e")
         } catch (e: UnsupportedJwtException) {
-            println("Unsupported JWT Token$e") //토큰형태가 아님
+            log.info("Unsupported JWT Token$e") //토큰형태가 아님
         } catch (e: IllegalArgumentException) {
-            println("JWT claims string is empty.$e") //없는 토큰임
+            log.info("JWT claims string is empty.$e") //없는 토큰임
+        } catch (e: Exception) {
+            log.info("JWT token Error.$e")
         }
         return false
     }
