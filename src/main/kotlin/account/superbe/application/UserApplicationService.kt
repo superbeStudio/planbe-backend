@@ -1,13 +1,12 @@
 package account.superbe.application
 
-import account.superbe.application.dto.UserDto
 import account.superbe.common.client.TokenClient
 import account.superbe.domain.service.UserService
 import account.superbe.infra.UserFactory
 import account.superbe.infra.UserJpaRepository
 import account.superbe.security.JwtTokenProvider
 import account.superbe.security.TokenDto
-import account.superbe.ui.post.UserLoginDto
+import account.superbe.application.dto.UserLoginDto
 import lombok.RequiredArgsConstructor
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

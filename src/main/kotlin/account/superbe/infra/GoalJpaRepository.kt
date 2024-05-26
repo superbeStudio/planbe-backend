@@ -16,7 +16,7 @@ interface GoalJpaRepository : JpaRepository<Goal, Long> {
     @Meta(comment = "find goals by user")
     fun findAllByUserSequence(userSeq: Long): List<Goal>
 
-    @Meta(comment = "delete goal by user")
+    @Meta(comment = "delete one goal by user")
     @Modifying
     @Query("""
         delete from Goal 

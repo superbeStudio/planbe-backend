@@ -1,4 +1,4 @@
-package account.superbe.ui.post
+package account.superbe.application.dto
 
 import account.superbe.security.TokenDto
 

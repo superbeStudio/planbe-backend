@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/goal")
 @RequiredArgsConstructor
-@Validated
 class GoalController (private val goalAppService: GoalApplicationService, private val goalService: GoalService){
     val log: Logger = LoggerFactory.getLogger(GoalController::class.java)
     @PostMapping
@@ -40,7 +39,7 @@ class GoalController (private val goalAppService: GoalApplicationService, privat
     @GetMapping
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun getGoals(@AuthenticationPrincipal user: UserDetails): ResponseDto<List<GoalDto>> {
-        log.info("[getGoals] 목표 상세 조회. userEmail = {}", user.username)
+        log.info("[getGoals] 목표 목록 조회. userEmail = {}", user.username)
         return ResponseDto(data = goalAppService.getGoals(user.username))
     }
 

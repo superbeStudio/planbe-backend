@@ -5,7 +5,7 @@ import account.superbe.application.dto.UserDto
 import account.superbe.common.io.ResponseDto
 import account.superbe.domain.service.UserService
 import account.superbe.security.TokenDto
-import account.superbe.ui.post.UserLoginDto
+import account.superbe.application.dto.UserLoginDto
 import account.superbe.ui.post.UserPostRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -21,21 +21,21 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 @Validated
-class UserController(private val userAppService: UserApplicationService, private val UserService: UserService) {
+class UserController(private val userAppService: UserApplicationService, private val userService: UserService) {
     val log: Logger = LoggerFactory.getLogger(UserController::class.java)
 
     @PostMapping
     fun createUser(@RequestBody data: UserPostRequest): ResponseDto<Long> {
         log.info("[createUser] 회원가입 email = {}", data.email)
         val user = UserDto(email = data.email, password = data.password, nickname = data.nickname, sex = data.sex, birth = data.birth)
-        return ResponseDto<Long>(data = UserService.createUser(user));
+        return ResponseDto<Long>(data = userService.createUser(user));
     }
 
     @GetMapping
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun getUserInfo(@AuthenticationPrincipal user: UserDetails) : ResponseDto<UserDto> {
         log.info("[getUserInfo] 유저 정보 조회 email = {}", user.username)
-        val result = UserService.getUserByEmailNonNull(user.username)
+        val result = userService.getUserByEmailNonNull(user.username)
         log.info("[getUserInfo] user PK = {}", result.userSeq)
         return ResponseDto(data = result);
     }
