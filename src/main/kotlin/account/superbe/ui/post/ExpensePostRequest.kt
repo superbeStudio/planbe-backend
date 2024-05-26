@@ -5,7 +5,7 @@ class ExpensePostRequest(
     val expenseName: String,
     val expenseAmount: Int
 ) {
-    class Update (
+    class UpdateExpense (
             val category: String? = null,
             val expenseName: String? = null,
             val expenseAmount: Int? = null

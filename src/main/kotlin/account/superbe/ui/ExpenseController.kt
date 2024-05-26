@@ -52,7 +52,7 @@ class ExpenseController(private val expenseService: ExpenseApplicationService) {
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun updateExpense(
             @AuthenticationPrincipal user: UserDetails, @PathVariable expenseSeq: Long,
-            @RequestBody data: ExpensePostRequest.Update): ResponseDto<ExpenseDto> {
+            @RequestBody data: ExpensePostRequest.UpdateExpense): ResponseDto<ExpenseDto> {
         log.info("[updateExpense] 지출 수정. 사용자 email = {}, 지출 PK = {}", user.username, expenseSeq)
         return ResponseDto(data = expenseService.updateExpense(user.username, expenseSeq, data.category, data.expenseName, data.expenseAmount))
     }
@@ -60,6 +60,7 @@ class ExpenseController(private val expenseService: ExpenseApplicationService) {
     @DeleteMapping("/{expenseSeq}")
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun deleteExpense(@AuthenticationPrincipal user: UserDetails, @PathVariable expenseSeq: Long): ResponseDto<Nothing> {
+        log.info("[deleteExpense] 지출 수정. 사용자 email = {}, 지출 PK = {}", user.username, expenseSeq)
         expenseService.deleteExpense(user.username, expenseSeq)
         return ResponseDto()
     }
