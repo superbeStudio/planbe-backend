@@ -24,7 +24,7 @@ class GoalController (private val goalAppService: GoalApplicationService, privat
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun createGoal(@RequestBody data: GoalPostRequest, @AuthenticationPrincipal user: UserDetails) : ResponseDto<Long>{
         log.info("[createGoal] 목표 생성 user seq = {}", user.username)
-        val goalDto = GoalDto(goalName = data.goalName, goalCategory = data.goalCategory, goalAmount = data.goalAmount,
+        val goalDto = GoalDto(goalName = data.goalName, categorySequence = data.categorySequence, goalAmount = data.goalAmount,
                 priority = data.priority, goalTime = data.goalTime, goalUrl = data.goalUrl)
         return ResponseDto(data = goalAppService.createGoal(goalDto, user.username));
     }
@@ -55,7 +55,7 @@ class GoalController (private val goalAppService: GoalApplicationService, privat
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
     fun updateGoalInfo(@PathVariable goalSeq: Long, @AuthenticationPrincipal user: UserDetails, @RequestBody data: GoalPostRequest.Update): ResponseDto<Nothing> {
         log.info("[updateGoalInfo] 목표 정보 수정. PK = {}, email = {}", goalSeq, user.username)
-        goalAppService.updateGoalInfo(goalSeq, user.username, data.goalName, data.goalCategory, data.goalAmount, data.priority, data.goalTime, data.goalUrl)
+        goalAppService.updateGoalInfo(goalSeq, user.username, data.goalName, data.categorySequence, data.goalAmount, data.priority, data.goalTime, data.goalUrl)
         return ResponseDto()
     }
 }

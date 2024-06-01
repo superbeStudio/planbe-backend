@@ -43,7 +43,7 @@ class GoalApplicationService(
         val goals = goalRepo.findAllByUserSequence(user.userSeq!!);
         log.info("[getGoals] 유저(PK = {})의 모든 목표 조회 size = {}", user.userSeq, goals.size)
         val result = goals.map { goal ->
-            GoalDto(goalSequence = goal.goalSequence, goalName = goal.goalName, goalCategory = goal.goalCategory,
+            GoalDto(goalSequence = goal.goalSequence, goalName = goal.goalName, categorySequence = goal.categorySequence,
                     goalAmount = goal.goalAmount, priority = goal.priority, goalTime = goal.goalTime, goalUrl = goal.goalUrl,
                     createDatetime = goal.createDatetime, updateDatetime = goal.updateDatetime)
         }
@@ -61,14 +61,14 @@ class GoalApplicationService(
            log.info("[deleteGoal] 삭제할 데이터 없음, 목표 PK = {}, user PK = {}", goalSeq, user.userSeq)
             throw IllegalArgumentException("해당 목표를 삭제할 수 없습니다. 목표가 존재하지않거나 본인이 작성한 목표가 아닙니다.")
         }
-        log.info("[deleteGoal] 목표 PK = {}, 총 {}개 삭제 완료 ", goalSeq, cnt)
+        log.info("[deleteGoal] 목표 PK = {}, 사용자 PK = {}, 총 {}개 삭제 완료 ", goalSeq, user.userSeq, cnt)
     }
 
     fun updateGoalInfo(
-            goalSequence: Long, email: String, goalName: String?, goalCategory: String?, goalAmount: Int?, priority: Int?,
+            goalSequence: Long, email: String, goalName: String?, categorySequence: Long?, goalAmount: Int?, priority: Int?,
             goalTime: LocalDate?, goalUrl: String?) {
         val user = userService.getUserByEmailNonNull(email)
-        goalService.updateGoalInfo(goalSequence, user.userSeq!!, goalName, goalCategory, goalAmount, priority, goalTime, goalUrl);
+        goalService.updateGoalInfo(goalSequence, user.userSeq!!, goalName, categorySequence, goalAmount, priority, goalTime, goalUrl);
     }
 
 }

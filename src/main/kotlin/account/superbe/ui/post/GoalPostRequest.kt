@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 class GoalPostRequest (
     val goalName: String,
-    val goalCategory: String,
+    val categorySequence: Long,
     val goalAmount: Int,
     val priority: Int,
     val goalTime: LocalDate,
@@ -13,7 +13,7 @@ class GoalPostRequest (
 ){
     class Update(
             val goalName: String? =null,
-            val goalCategory: String? =null,
+            val categorySequence: Long? =null,
             val goalAmount: Int? =null,
             val priority: Int? =null,
             val goalTime: LocalDate? =null,

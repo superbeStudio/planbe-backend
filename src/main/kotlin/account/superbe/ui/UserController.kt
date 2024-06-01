@@ -28,7 +28,7 @@ class UserController(private val userAppService: UserApplicationService, private
     fun createUser(@RequestBody data: UserPostRequest): ResponseDto<Long> {
         log.info("[createUser] 회원가입 email = {}", data.email)
         val user = UserDto(email = data.email, password = data.password, nickname = data.nickname, sex = data.sex, birth = data.birth)
-        return ResponseDto<Long>(data = userService.createUser(user));
+        return ResponseDto<Long>(data = userAppService.createUser(user));
     }
 
     @GetMapping

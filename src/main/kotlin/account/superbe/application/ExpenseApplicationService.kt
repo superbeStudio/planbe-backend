@@ -36,7 +36,7 @@ class ExpenseApplicationService(
         val expenses = expenseJpaRepository.findByUserSequence(user.userSeq!!);
         val result = expenses.map { expense ->
             ExpenseDto(expenseSequence = expense.expenseSequence, expenseName = expense.expenseName,
-                    category = expense.category, expenseAmount = expense.expenseAmount,
+                    categorySequence = expense.categorySequence, expenseAmount = expense.expenseAmount,
                     createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime)
         }
         return result.sortedWith( // 정렬 조건 미정
@@ -51,15 +51,15 @@ class ExpenseApplicationService(
         val expense = expenseService.getExpenseDtoByExpenseSequenceAndUserSequenceNonNull(
                 expenseSeq, user.userSeq!!)
         return ExpenseDto(expenseSequence = expense.expenseSequence, expenseName = expense.expenseName,
-                category = expense.category, expenseAmount = expense.expenseAmount,
+                categorySequence = expense.categorySequence, expenseAmount = expense.expenseAmount,
                 createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime)
     }
 
     @Transactional
-    fun updateExpense(email: String, expenseSeq: Long, category: String?, expenseName: String?, expenseAmount: Int?)
+    fun updateExpense(email: String, expenseSeq: Long, categorySequence: Long?, expenseName: String?, expenseAmount: Int?)
     : ExpenseDto {
         val user = userService.getUserByEmailNonNull(email)
-        return expenseService.updateExpense(user.userSeq!!, expenseSeq, category, expenseName, expenseAmount)
+        return expenseService.updateExpense(user.userSeq!!, expenseSeq, categorySequence, expenseName, expenseAmount)
     }
 
     fun deleteExpense(email: String, expenseSeq: Long) {
@@ -69,9 +69,7 @@ class ExpenseApplicationService(
             log.info("[deleteExpense] 삭제할 데이터 없음, 지출 PK = {}, user PK = {}", expenseSeq, user.userSeq)
             throw IllegalArgumentException("해당 목표를 삭제할 수 없습니다. 목표가 존재하지않거나 본인이 작성한 목표가 아닙니다.")
         }
-        log.info("[deleteExpense] 지출 PK = {}, 총 {}개 삭제 완료 ", expenseSeq, cnt)
-
-
+        log.info("[deleteExpense] 지출 PK = {}, 사용자 PK = {}, 총 {}개 삭제 완료 ", expenseSeq, user.userSeq, cnt)
     }
 
 }

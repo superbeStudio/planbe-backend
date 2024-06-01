@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 class ExpenseDto(
     val expenseSequence: Long? = null,
-    var category: String,
+    var categorySequence: Long,
     var expenseName: String,
     var expenseAmount: Int,
     var createDatetime: LocalDateTime? = null,

@@ -20,18 +20,4 @@ class UserService(private val userRepo: UserJpaRepository, private val userFacto
         return UserDto(email = user.email, password = user.password, nickname = user.nickname, sex = user.sex,
                 birth = user.birth, userSeq = user.userSequence)
     }
-
-    @Transactional
-    fun createUser(data: UserDto) : Long{
-        val user = userFactory.create(data)
-        if(userRepo.existsByEmail(user.email)) {
-            log.info("[createUser] 회원가입 실패, 중복 email = {}", data.email)
-            throw IllegalArgumentException("이미 등록된 이메일입니다.")
-        }
-        userRepo.save(user)
-        log.info("[createUser] 회원가입 성공 PK = {}", user.userSequence)
-        return user.userSequence!!
-    }
-
-
 }

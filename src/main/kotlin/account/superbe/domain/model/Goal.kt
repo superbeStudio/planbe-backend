@@ -21,8 +21,8 @@ class Goal (
         val goalSequence: Long? = null,
         @Column(name = "goal_name")
         var goalName: String,
-        @Column(name = "goal_category")
-        var goalCategory: String,
+        @Column(name = "cate_seq")
+        var categorySequence: Long,
         @Column(name = "goal_amount")
         var goalAmount: Int,
         @Column(name = "priority")
@@ -41,14 +41,14 @@ class Goal (
         val userSequence: Long
 ){
         fun updateData(
-                goalName: String?, goalCategory: String?, goalAmount: Int?, priority: Int?, goalTime: LocalDate?,
+                goalName: String?, categorySequence: Long?, goalAmount: Int?, priority: Int?, goalTime: LocalDate?,
                 goalUrl: String?
         ) {
                 if(hasText(goalName)) {
                         this.goalName = goalName!!
                 }
-                if(hasText(goalCategory)) {
-                        this.goalCategory = goalCategory!!
+                if(categorySequence != null) {
+                        this.categorySequence = categorySequence!!
                 }
                 if(hasText(goalUrl)) {
                         this.goalUrl = goalUrl!!

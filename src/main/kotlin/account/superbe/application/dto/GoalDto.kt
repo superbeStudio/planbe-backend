@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 class GoalDto(
         val goalSequence: Long? = null,
         var goalName: String,
-        var goalCategory: String,
+        var categorySequence: Long,
         var goalAmount: Int,
         var priority: Int,
         var goalTime: LocalDate,

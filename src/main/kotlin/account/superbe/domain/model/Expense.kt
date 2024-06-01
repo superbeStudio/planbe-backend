@@ -18,7 +18,7 @@ class Expense (
     @Column(name = "expense_seq")
     val expenseSequence: Long? = null,
     @Column(name = "category")
-    var category: String,
+    var categorySequence: Long,
     @Column(name = "expense_name")
     var expenseName: String,
     @Column(name = "expense_amount")
@@ -31,11 +31,9 @@ class Expense (
     var updateDatetime: LocalDateTime = LocalDateTime.now()
 ){
     fun updateData(
-            category: String?, expenseName: String?, expenseAmount: Int?
+            categorySequence: Long?, expenseName: String?, expenseAmount: Int?
     ) {
-        if(StringUtils.hasText(category)) {
-            this.category = category!!
-        }
+        categorySequence?.also { this.categorySequence = it }
         if(StringUtils.hasText(expenseName)) {
             this.expenseName = expenseName!!
         }

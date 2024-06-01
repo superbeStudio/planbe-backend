@@ -1,5 +1,6 @@
 package account.superbe.application
 
+import account.superbe.application.dto.UserDto
 import account.superbe.common.client.TokenClient
 import account.superbe.domain.service.UserService
 import account.superbe.infra.UserFactory
@@ -26,6 +27,14 @@ class UserApplicationService (
         private val tokenClient: TokenClient
 ){
     val log: Logger = LoggerFactory.getLogger(UserApplicationService::class.java)
+
+    @Transactional
+    fun createUser(data: UserDto) : Long{
+        val user = userFactory.create(data)
+        userRepo.save(user)
+        log.info("[createUser] 회원가입 성공 PK = {}", user.userSequence)
+        return user.userSequence!!
+    }
 
     @Transactional(readOnly = true)
     fun login(email: String, password: String): UserLoginDto {

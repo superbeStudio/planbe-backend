@@ -15,17 +15,17 @@ class GoalService(private val goalRepo: GoalJpaRepository) {
     val log: Logger = LoggerFactory.getLogger(GoalService::class.java)
     fun getGoalDtoBySequenceAndUserSequenceNonNull(goalSequence: Long, userSequence: Long): GoalDto {
         val goal = getGoalEntityBySequenceAndUserSequenceNonNull(goalSequence, userSequence)
-        return GoalDto(goalSequence = goal.goalSequence, goalName = goal.goalName, goalCategory = goal.goalCategory,
+        return GoalDto(goalSequence = goal.goalSequence, goalName = goal.goalName, categorySequence = goal.categorySequence,
             goalAmount = goal.goalAmount, priority = goal.priority, goalTime = goal.goalTime, goalUrl = goal.goalUrl,
             createDatetime = goal.createDatetime, updateDatetime = goal.updateDatetime)
     }
 
     fun updateGoalInfo(
-        goalSequence: Long, userSequence: Long, goalName: String?, goalCategory: String?, goalAmount: Int?,
+        goalSequence: Long, userSequence: Long, goalName: String?, categorySequence: Long?, goalAmount: Int?,
         priority: Int?, goalTime: LocalDate?, goalUrl: String?
     ) {
         val goal = getGoalEntityBySequenceAndUserSequenceNonNull(goalSequence, userSequence)
-        goal.updateData(goalName = goalName, goalCategory = goalCategory, goalAmount = goalAmount,
+        goal.updateData(goalName = goalName, categorySequence = categorySequence, goalAmount = goalAmount,
             priority = priority, goalTime = goalTime, goalUrl = goalUrl)
 
         goalRepo.save(goal)

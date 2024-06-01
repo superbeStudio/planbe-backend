@@ -30,7 +30,7 @@ class ExpenseController(private val expenseService: ExpenseApplicationService) {
     fun createExpense(@RequestBody data: ExpensePostRequest, @AuthenticationPrincipal user: UserDetails): ResponseDto<Long> {
         log.info("[createExpense] 지출 생성. 사용자 email = {}", user.username)
         return ResponseDto(data = expenseService.createExpense(user.username, ExpenseDto(
-                category = data.category, expenseName = data.expenseName, expenseAmount = data.expenseAmount)));
+                categorySequence = data.categorySequence, expenseName = data.expenseName, expenseAmount = data.expenseAmount)));
     }
 
     @GetMapping
@@ -54,7 +54,7 @@ class ExpenseController(private val expenseService: ExpenseApplicationService) {
             @AuthenticationPrincipal user: UserDetails, @PathVariable expenseSeq: Long,
             @RequestBody data: ExpensePostRequest.UpdateExpense): ResponseDto<ExpenseDto> {
         log.info("[updateExpense] 지출 수정. 사용자 email = {}, 지출 PK = {}", user.username, expenseSeq)
-        return ResponseDto(data = expenseService.updateExpense(user.username, expenseSeq, data.category, data.expenseName, data.expenseAmount))
+        return ResponseDto(data = expenseService.updateExpense(user.username, expenseSeq, data.categorySequence, data.expenseName, data.expenseAmount))
     }
 
     @DeleteMapping("/{expenseSeq}")

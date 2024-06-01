@@ -16,7 +16,7 @@ class ExpenseService(private val expenseRepo: ExpenseJpaRepository) {
     fun getExpenseDtoByExpenseSequenceAndUserSequenceNonNull(expenseSeq: Long, userSeq: Long): ExpenseDto {
         val expense = getExpenseEntityByExpenseSequenceAndUserSequenceNonNull(expenseSeq, userSeq)
         return ExpenseDto(expenseSequence = expense.expenseSequence, expenseName = expense.expenseName,
-                category = expense.category, expenseAmount = expense.expenseAmount,
+                categorySequence = expense.categorySequence, expenseAmount = expense.expenseAmount,
                 createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime)
 
     }
@@ -29,15 +29,15 @@ class ExpenseService(private val expenseRepo: ExpenseJpaRepository) {
         return expense
     }
 
-    fun updateExpense(userSeq: Long, expenseSeq: Long, category: String?, expenseName: String?, expenseAmount: Int?)
+    fun updateExpense(userSeq: Long, expenseSeq: Long, categorySequence: Long?, expenseName: String?, expenseAmount: Int?)
     : ExpenseDto {
         val expense = getExpenseEntityByExpenseSequenceAndUserSequenceNonNull(expenseSeq, userSeq)
-        expense.updateData(category, expenseName, expenseAmount)
+        expense.updateData(categorySequence, expenseName, expenseAmount)
 
         expenseRepo.save(expense)
         log.info("[updateExpense] 지출 수정 완료 지출 PK = {}, 사용자 PK = {}", expenseSeq, userSeq)
         return ExpenseDto(expenseSequence = expense.expenseSequence, expenseName = expense.expenseName,
-                category = expense.category, expenseAmount = expense.expenseAmount,
+                categorySequence = expense.categorySequence, expenseAmount = expense.expenseAmount,
                 createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime)
     }
 
