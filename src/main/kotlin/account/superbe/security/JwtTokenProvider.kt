@@ -48,7 +48,7 @@ class JwtTokenProvider(
 
     fun getAuthentication(accessToken: String?): Authentication {
         val claims: Claims = parseClaims(accessToken)
-        if (claims.get("auth") == null) {
+        if (claims["auth"] == null) {
             throw IllegalArgumentException("권한 정보가 없는 토큰입니다.")
         }
         val authorities: Collection<GrantedAuthority> =

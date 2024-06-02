@@ -32,5 +32,5 @@ interface CategoryJpaRepository : JpaRepository<Category, Long> {
     fun existsByUserSequenceAndCategoryTypeAndCategorySequenceNotAndCategoryName(userSequence: Long, categoryType: CategoryType, categorySequence: Long, categoryName: String): Boolean
 
     @Meta(comment = "check if the category sequence is the user")
-    fun existsByUserSequenceAndCategorySequenceAndCategoryType(categorySequence: Long, userSeq: Long, categoryType: CategoryType): Boolean
+    fun existsByUserSequenceAndCategorySequenceAndCategoryType(userSeq: Long, categorySequence: Long, categoryType: CategoryType): Boolean
 }

@@ -38,7 +38,10 @@ class GoalApplicationService(
     @Transactional(readOnly = true)
     fun getGoal(goalSeq: Long, email: String): GoalDto {
         val user = userService.getUserByEmailNonNull(email);
-        return goalService.getGoalDtoBySequenceAndUserSequenceNonNull(goalSeq, user.userSeq!!)
+        val result = goalService.getGoalDtoBySequenceAndUserSequenceNonNull(goalSeq, user.userSeq!!)
+        val categoryName = categoryService.getCategoryName(result.categorySequence)
+        result.categoryName = categoryName
+        return result
     }
 
     @Transactional(readOnly = true)
@@ -46,8 +49,10 @@ class GoalApplicationService(
         val user = userService.getUserByEmailNonNull(email)
         val goals = goalRepo.findAllByUserSequence(user.userSeq!!);
         log.info("[getGoals] 유저(PK = {})의 모든 목표 조회 size = {}", user.userSeq, goals.size)
+        val categoriesNameMap = categoryService.getCategoriesNameMap(goals.map { it -> it.categorySequence })
         val result = goals.map { goal ->
-            GoalDto(goalSequence = goal.goalSequence, goalName = goal.goalName, categorySequence = goal.categorySequence,
+            val categoryName = categoriesNameMap.get(goal.categorySequence)
+            GoalDto(goalSequence = goal.goalSequence, goalName = goal.goalName, categorySequence = goal.categorySequence, categoryName = categoryName,
                     goalAmount = goal.goalAmount, priority = goal.priority, goalTime = goal.goalTime, goalUrl = goal.goalUrl,
                     createDatetime = goal.createDatetime, updateDatetime = goal.updateDatetime)
         }
@@ -62,7 +67,7 @@ class GoalApplicationService(
         val user = userService.getUserByEmailNonNull(email)
         val cnt = goalRepo.deleteByGoalSequenceAndUserSequence(goalSeq, user.userSeq!!)
         if (cnt == 0) {
-           log.info("[deleteGoal] 삭제할 데이터 없음, 목표 PK = {}, user PK = {}", goalSeq, user.userSeq)
+            log.info("[deleteGoal] 삭제할 데이터 없음, 목표 PK = {}, user PK = {}", goalSeq, user.userSeq)
             throw IllegalArgumentException("해당 목표를 삭제할 수 없습니다. 목표가 존재하지않거나 본인이 작성한 목표가 아닙니다.")
         }
         log.info("[deleteGoal] 목표 PK = {}, 사용자 PK = {}, 총 {}개 삭제 완료 ", goalSeq, user.userSeq, cnt)

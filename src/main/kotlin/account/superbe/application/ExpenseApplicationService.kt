@@ -27,7 +27,7 @@ class ExpenseApplicationService(
     @Transactional
     fun createExpense(email: String, data: ExpenseDto): Long {
         val user = userService.getUserByEmailNonNull(email)
-        categoryService.validateCategorySequence(data.categorySequence, user.userSeq!!, CategoryType.E)
+        categoryService.validateCategorySequence(categorySequence = data.categorySequence, userSeq = user.userSeq!!, categoryType = CategoryType.E)
         val expense = expenseFactory.create(data, user.userSeq)
         expenseJpaRepository.save(expense)
         log.info("[createExpense] 지출 생성 완료 지출 PK = {}, 사용자 PK = {}", expense.expenseSequence, expense.userSequence)
@@ -38,10 +38,14 @@ class ExpenseApplicationService(
     fun getExpenses(email: String): List<ExpenseDto> {
         val user = userService.getUserByEmailNonNull(email)
         val expenses = expenseJpaRepository.findByUserSequence(user.userSeq!!);
+        val categoriesInfoMap = categoryService.getCategoriesNameMap(expenses
+                .map { it -> it.categorySequence })
+
         val result = expenses.map { expense ->
+            val categoryName = categoriesInfoMap.get(expense.categorySequence)
             ExpenseDto(expenseSequence = expense.expenseSequence, expenseName = expense.expenseName,
                     categorySequence = expense.categorySequence, expenseAmount = expense.expenseAmount,
-                    createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime)
+                    createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime, categoryName = categoryName)
         }
         return result.sortedWith( // 정렬 조건 미정
                 compareBy { it.createDatetime }
@@ -54,9 +58,10 @@ class ExpenseApplicationService(
         val user = userService.getUserByEmailNonNull(email)
         val expense = expenseService.getExpenseDtoByExpenseSequenceAndUserSequenceNonNull(
                 expenseSeq, user.userSeq!!)
+        val categoryName = categoryService.getCategoryName(expense.categorySequence)
         return ExpenseDto(expenseSequence = expense.expenseSequence, expenseName = expense.expenseName,
                 categorySequence = expense.categorySequence, expenseAmount = expense.expenseAmount,
-                createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime)
+                createDatetime = expense.createDatetime, updateDatetime = expense.updateDatetime, categoryName = categoryName)
     }
 
     @Transactional

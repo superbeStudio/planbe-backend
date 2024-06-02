@@ -1,23 +1,35 @@
 package account.superbe.ui.post
 
-import account.superbe.application.dto.GoalDto
+import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 
-class GoalPostRequest (
-    val goalName: String,
-    val categorySequence: Long,
-    val goalAmount: Int,
-    val priority: Int,
-    val goalTime: LocalDate,
-    val goalUrl: String
-){
+class GoalPostRequest(
+        @Schema(description = "목표 명")
+        val goalName: String,
+        @Schema(description = "카테고리 PK")
+        val categorySequence: Long,
+        @Schema(description = "목표 금액")
+        val goalAmount: Int,
+        @Schema(description = "우선순위")
+        val priority: Int,
+        @Schema(description = "목표기한")
+        val goalTime: LocalDate,
+        @Schema(description = "목표 url")
+        val goalUrl: String
+) {
     class Update(
-            val goalName: String? =null,
-            val categorySequence: Long? =null,
-            val goalAmount: Int? =null,
-            val priority: Int? =null,
-            val goalTime: LocalDate? =null,
-            val goalUrl: String? =null
+            @Schema(description = "목표 명")
+            val goalName: String? = null,
+            @Schema(description = "카테고리 PK")
+            val categorySequence: Long? = null,
+            @Schema(description = "목표 금액")
+            val goalAmount: Int? = null,
+            @Schema(description = "우선순위")
+            val priority: Int? = null,
+            @Schema(description = "목표기한")
+            val goalTime: LocalDate? = null,
+            @Schema(description = "목표 url")
+            val goalUrl: String? = null
     ) {
 
     }
