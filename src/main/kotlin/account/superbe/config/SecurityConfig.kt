@@ -1,6 +1,5 @@
 package account.superbe.config
 
-import account.superbe.domain.model.Role
 import account.superbe.security.JwtFilter
 import lombok.RequiredArgsConstructor
 import org.springframework.context.annotation.Bean
@@ -27,16 +26,15 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .authorizeHttpRequests {
-                authorizeRequests ->
+                .authorizeHttpRequests { authorizeRequests ->
                     authorizeRequests
-                        .requestMatchers("/api/user/login", "/api/user","/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                            .requestMatchers("/api/user/login", "/api/user", "/swagger-ui/**", "/v3/api-docs/**", "/").permitAll()
                             .anyRequest().hasAnyRole("N")
-            }
-            .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
+                }
+                .csrf { csrf: CsrfConfigurer<HttpSecurity> -> csrf.disable() }
         http
-                .headers{headerConfig ->
-                    headerConfig.frameOptions{frameOptions -> frameOptions.disable()}
+                .headers { headerConfig ->
+                    headerConfig.frameOptions { frameOptions -> frameOptions.disable() }
                 }
                 .cors { corsConfigurationSource: CorsConfigurer<HttpSecurity?> -> corsConfigurationSource.configurationSource(corsConfigurationSource()) }
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
