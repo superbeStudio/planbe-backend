@@ -21,9 +21,9 @@ class CategoryService(private val categoryRepo: CategoryJpaRepository, private v
                     throw IllegalArgumentException("해당 카테고리를 수정할 수 없습니다. 없는 카테고리 번호이거나 본인이 작성한 카테고리가 아닙니다.")
                 }
         val finalCategoryType = categoryType ?: category.categoryType
-        if (categoryName != null &&
-                categoryRepo.existsByUserSequenceAndCategoryTypeAndCategorySequenceNotAndCategoryName(userSeq,
-                        finalCategoryType, categorySequence, categoryName)) {
+        val finalCategoryName = categoryName ?: category.categoryName
+        if (categoryRepo.existsByUserSequenceAndCategoryTypeAndCategorySequenceNotAndCategoryName(userSeq,
+                        finalCategoryType, categorySequence, finalCategoryName)) {
             log.info("[updateCategory] 카테고리 수정 실패. 이미 등록된 카테고리 명입니다. 카테고리 PK = {}, 사용자 PK = {}", categorySequence, userSeq)
             throw IllegalArgumentException("다른 카테고리에서 사용중인 카테고리 명을 입력하셨습니다.")
         }

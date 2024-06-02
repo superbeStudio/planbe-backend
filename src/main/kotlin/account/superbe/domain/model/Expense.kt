@@ -17,7 +17,7 @@ class Expense (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expense_seq")
     val expenseSequence: Long? = null,
-    @Column(name = "category")
+    @Column(name = "cate_seq")
     var categorySequence: Long,
     @Column(name = "expense_name")
     var expenseName: String,
