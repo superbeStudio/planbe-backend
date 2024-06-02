@@ -1,6 +1,8 @@
 package account.superbe.application
 
 import account.superbe.application.dto.ExpenseDto
+import account.superbe.domain.model.CategoryType
+import account.superbe.domain.service.CategoryService
 import account.superbe.domain.service.ExpenseService
 import account.superbe.domain.service.UserService
 import account.superbe.infra.ExpenseFactory
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class ExpenseApplicationService(
         private val expenseService: ExpenseService,
         private val userService: UserService,
+        private val categoryService: CategoryService,
         private val expenseFactory: ExpenseFactory,
         private val expenseJpaRepository: ExpenseJpaRepository
 ) {
@@ -24,7 +27,8 @@ class ExpenseApplicationService(
     @Transactional
     fun createExpense(email: String, data: ExpenseDto): Long {
         val user = userService.getUserByEmailNonNull(email)
-        val expense = expenseFactory.create(data, user.userSeq!!)
+        categoryService.validateCategorySequence(data.categorySequence, user.userSeq!!, CategoryType.E)
+        val expense = expenseFactory.create(data, user.userSeq)
         expenseJpaRepository.save(expense)
         log.info("[createExpense] 지출 생성 완료 지출 PK = {}, 사용자 PK = {}", expense.expenseSequence, expense.userSequence)
         return expense.expenseSequence!!
@@ -57,8 +61,9 @@ class ExpenseApplicationService(
 
     @Transactional
     fun updateExpense(email: String, expenseSeq: Long, categorySequence: Long?, expenseName: String?, expenseAmount: Int?)
-    : ExpenseDto {
+            : ExpenseDto {
         val user = userService.getUserByEmailNonNull(email)
+        categorySequence?.also { categoryService.validateCategorySequence(categorySequence, user.userSeq!!, CategoryType.E) }
         return expenseService.updateExpense(user.userSeq!!, expenseSeq, categorySequence, expenseName, expenseAmount)
     }
 

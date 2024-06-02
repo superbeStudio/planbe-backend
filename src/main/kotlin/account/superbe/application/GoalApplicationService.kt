@@ -1,6 +1,8 @@
 package account.superbe.application
 
 import account.superbe.application.dto.GoalDto
+import account.superbe.domain.model.CategoryType
+import account.superbe.domain.service.CategoryService
 import account.superbe.domain.service.GoalService
 import account.superbe.domain.service.UserService
 import account.superbe.infra.GoalFactory
@@ -18,6 +20,7 @@ class GoalApplicationService(
         private val goalRepo: GoalJpaRepository,
         private val goalService: GoalService,
         private val userService: UserService,
+        private val categoryService: CategoryService,
         private val goalFactory: GoalFactory
 ) {
     val log: Logger = LoggerFactory.getLogger(GoalApplicationService::class.java)
@@ -25,7 +28,8 @@ class GoalApplicationService(
     @Transactional
     fun createGoal(data: GoalDto, email: String): Long {
         val user = userService.getUserByEmailNonNull(email)
-        val goal = goalFactory.create(data, user.userSeq!!)
+        categoryService.validateCategorySequence(data.categorySequence, user.userSeq!!, CategoryType.G)
+        val goal = goalFactory.create(data, user.userSeq)
         goalRepo.save(goal)
         log.info("[createGoal] 목표생성 성공 PK = {}", goal.goalSequence)
         return goal.goalSequence!!
@@ -64,10 +68,12 @@ class GoalApplicationService(
         log.info("[deleteGoal] 목표 PK = {}, 사용자 PK = {}, 총 {}개 삭제 완료 ", goalSeq, user.userSeq, cnt)
     }
 
+    @Transactional
     fun updateGoalInfo(
             goalSequence: Long, email: String, goalName: String?, categorySequence: Long?, goalAmount: Int?, priority: Int?,
             goalTime: LocalDate?, goalUrl: String?) {
         val user = userService.getUserByEmailNonNull(email)
+        categorySequence?.also { categoryService.validateCategorySequence(categorySequence, user.userSeq!!, CategoryType.G) }
         goalService.updateGoalInfo(goalSequence, user.userSeq!!, goalName, categorySequence, goalAmount, priority, goalTime, goalUrl);
     }
 

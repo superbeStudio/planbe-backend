@@ -1,7 +1,6 @@
 package account.superbe.domain.service
 
 import account.superbe.application.dto.CategoryDto
-import account.superbe.domain.model.Category
 import account.superbe.domain.model.CategoryType
 import account.superbe.infra.CategoryFactory
 import account.superbe.infra.CategoryJpaRepository
@@ -17,7 +16,7 @@ class CategoryService(private val categoryRepo: CategoryJpaRepository, private v
     fun updateCategory(userSeq: Long, categorySequence: Long, categoryType: CategoryType?, categoryName: String?): CategoryDto {
         val category = categoryRepo.findByUserSequenceAndCategorySequence(userSeq, categorySequence)
                 .orElseThrow {
-                    log.info("[updateCategory] 카테고리 수정 실패. PK오류이거나 본인이 작성한 카테고리가 아님. 카테고리 PK = {}, 사용자 PK = {}", categorySequence, userSeq)
+                    log.info("[updateCategory] 카테고리 수정 실패. PK 오류이거나 본인이 작성한 카테고리가 아님. 카테고리 PK = {}, 사용자 PK = {}", categorySequence, userSeq)
                     throw IllegalArgumentException("해당 카테고리를 수정할 수 없습니다. 없는 카테고리 번호이거나 본인이 작성한 카테고리가 아닙니다.")
                 }
         val finalCategoryType = categoryType ?: category.categoryType
@@ -32,5 +31,12 @@ class CategoryService(private val categoryRepo: CategoryJpaRepository, private v
         return CategoryDto(categorySequence = category.categorySequence, categoryName = category.categoryName,
                 categoryType = category.categoryType, userSequence = category.userSequence,
                 createDatetime = category.createDatetime, updateDatetime = category.updateDatetime)
+    }
+
+    fun validateCategorySequence(categorySequence: Long, userSeq: Long, categoryType: CategoryType) {
+        if(!categoryRepo.existsByUserSequenceAndCategorySequenceAndCategoryType(categorySequence, userSeq, categoryType)) {
+            log.info("[checkCategorySequence] 해당 카테고리를 사용할 수 없음. 카테고리 PK = {}, 사용자 PK = {}", categorySequence, userSeq)
+            throw IllegalArgumentException("사용할 수 없는 카테고리입니다. 없는 카테고리 번호이거나 본인이 작성한 카테고리가 아닙니다.")
+        }
     }
 }
