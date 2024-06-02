@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Meta
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 interface CategoryJpaRepository : JpaRepository<Category, Long> {
     @Meta(comment = "check for duplicates in my category name and type")
@@ -26,5 +27,8 @@ interface CategoryJpaRepository : JpaRepository<Category, Long> {
     fun deleteByExpenseSequenceAndUserSequence(categorySequence: Long, userSequence: Long): Int
 
     @Meta(comment = "find one category by user and category PK")
-    fun findByUserSequenceAndCategorySequence(userSequence: Long, categorySequence: Long): Category
+    fun findByUserSequenceAndCategorySequence(userSequence: Long, categorySequence: Long): Optional<Category>
+
+    fun existsByUserSequenceAndCategoryTypeAndCategorySequenceNotAndCategoryName(userSequence: Long, categoryType: CategoryType,
+                                                                  categorySequence: Long, categoryName: String): Boolean
 }

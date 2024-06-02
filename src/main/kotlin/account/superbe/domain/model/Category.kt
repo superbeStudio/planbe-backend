@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "category_info")
+@Table(name = "cate_info")
 class Category (
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "cate_seq") var categorySequence: Long? = null,
