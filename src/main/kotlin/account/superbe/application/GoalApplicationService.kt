@@ -4,7 +4,7 @@ import account.superbe.application.dto.GoalDto
 import account.superbe.domain.model.CategoryType
 import account.superbe.domain.service.CategoryService
 import account.superbe.domain.service.GoalService
-import account.superbe.domain.service.UserService
+import account.superbe.domain.service.user.UserService
 import account.superbe.infra.GoalFactory
 import account.superbe.infra.GoalJpaRepository
 import lombok.RequiredArgsConstructor

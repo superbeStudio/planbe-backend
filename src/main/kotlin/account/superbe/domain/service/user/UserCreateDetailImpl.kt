@@ -1,4 +1,4 @@
-package account.superbe.domain.service
+package account.superbe.domain.service.user
 
 import account.superbe.domain.model.User
 import org.springframework.security.core.GrantedAuthority

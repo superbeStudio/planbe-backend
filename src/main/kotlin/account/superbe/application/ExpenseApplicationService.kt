@@ -4,7 +4,7 @@ import account.superbe.application.dto.ExpenseDto
 import account.superbe.domain.model.CategoryType
 import account.superbe.domain.service.CategoryService
 import account.superbe.domain.service.ExpenseService
-import account.superbe.domain.service.UserService
+import account.superbe.domain.service.user.UserService
 import account.superbe.infra.ExpenseFactory
 import account.superbe.infra.ExpenseJpaRepository
 import lombok.RequiredArgsConstructor

@@ -2,10 +2,10 @@ package account.superbe.ui
 
 import account.superbe.application.UserApplicationService
 import account.superbe.application.dto.UserDto
-import account.superbe.common.io.ResponseDto
-import account.superbe.domain.service.UserService
-import account.superbe.security.TokenDto
 import account.superbe.application.dto.UserLoginDto
+import account.superbe.common.io.ResponseDto
+import account.superbe.domain.service.user.UserService
+import account.superbe.security.TokenDto
 import account.superbe.ui.post.UserPostRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -33,7 +33,7 @@ class UserController(private val userAppService: UserApplicationService, private
 
     @GetMapping
     @Operation(security = [SecurityRequirement(name = "bearerAuth")])
-    fun getUserInfo(@AuthenticationPrincipal user: UserDetails) : ResponseDto<UserDto> {
+    fun getUserInfo(@AuthenticationPrincipal user: UserDetails): ResponseDto<UserDto> {
         log.info("[getUserInfo] 유저 정보 조회 email = {}", user.username)
         val result = userService.getUserByEmailNonNull(user.username)
         log.info("[getUserInfo] user PK = {}", result.userSeq)
@@ -43,7 +43,7 @@ class UserController(private val userAppService: UserApplicationService, private
     @PostMapping("/login")
     fun login(@RequestBody data: UserPostRequest.Login): ResponseDto<UserLoginDto> {
         log.info("[login] 로그인 email = {}", data.email)
-        return ResponseDto<UserLoginDto> (data = userAppService.login(data.email, data.password))
+        return ResponseDto<UserLoginDto>(data = userAppService.login(data.email, data.password))
     }
 
     @PostMapping("/refresh")

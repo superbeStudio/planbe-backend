@@ -1,4 +1,4 @@
-package account.superbe.domain.service
+package account.superbe.domain.service.user
 
 import account.superbe.application.dto.UserDto
 import account.superbe.infra.UserFactory
@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 @RequiredArgsConstructor

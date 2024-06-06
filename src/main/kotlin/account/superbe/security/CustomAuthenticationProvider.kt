@@ -1,6 +1,6 @@
 package account.superbe.security
 
-import account.superbe.domain.service.CustomUserDetailService
+import account.superbe.domain.service.user.CustomUserDetailService
 import lombok.RequiredArgsConstructor
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

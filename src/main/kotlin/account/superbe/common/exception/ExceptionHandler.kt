@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.client.RestTemplate
@@ -16,7 +17,7 @@ class ExceptionHandler {
     @Autowired
     lateinit var env: Environment
 
-    @ExceptionHandler(IllegalArgumentException::class)
+    @ExceptionHandler(IllegalArgumentException::class, MethodArgumentNotValidException::class)
     fun handleException(e: Exception): ResponseEntity<ResponseDto<Nothing>> {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

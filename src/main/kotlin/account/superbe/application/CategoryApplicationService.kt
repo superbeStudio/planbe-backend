@@ -3,7 +3,7 @@ package account.superbe.application
 import account.superbe.application.dto.CategoryDto
 import account.superbe.domain.model.CategoryType
 import account.superbe.domain.service.CategoryService
-import account.superbe.domain.service.UserService
+import account.superbe.domain.service.user.UserService
 import account.superbe.infra.CategoryFactory
 import account.superbe.infra.CategoryJpaRepository
 import lombok.RequiredArgsConstructor
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @RequiredArgsConstructor
 class CategoryApplicationService(private val userService: UserService, private val categoryFactory: CategoryFactory,
-         private val categoryRepo: CategoryJpaRepository, private val categoryService: CategoryService) {
+                                 private val categoryRepo: CategoryJpaRepository, private val categoryService: CategoryService) {
     val log: Logger = LoggerFactory.getLogger(CategoryApplicationService::class.java)
 
     @Transactional
@@ -50,11 +50,11 @@ class CategoryApplicationService(private val userService: UserService, private v
             log.info("[deleteCategory] 삭제할 데이터 없음, 카테고리 PK = {}, user PK = {}", categorySequence, user.userSeq)
             throw IllegalArgumentException("해당 카테고리를 삭제할 수 없습니다. 카테고리 PK 오류이거나 본인이 작성한 카테고리가 아닙니다.")
         }
-        log.info("[deleteExpense] 카테고리 PK = {}, 사용자 PK = {}, 총 {}개 삭제 완료 ", categorySequence, user.userSeq,cnt)
+        log.info("[deleteExpense] 카테고리 PK = {}, 사용자 PK = {}, 총 {}개 삭제 완료 ", categorySequence, user.userSeq, cnt)
     }
 
     fun updateCategory(email: String, categorySequence: Long, categoryType: CategoryType?, categoryName: String?)
-    : CategoryDto {
+            : CategoryDto {
         val user = userService.getUserByEmailNonNull(email)
         return categoryService.updateCategory(user.userSeq!!, categorySequence, categoryType, categoryName)
     }

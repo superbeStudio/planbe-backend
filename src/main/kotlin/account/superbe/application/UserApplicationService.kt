@@ -1,35 +1,35 @@
 package account.superbe.application
 
 import account.superbe.application.dto.UserDto
+import account.superbe.application.dto.UserLoginDto
 import account.superbe.common.client.TokenClient
-import account.superbe.domain.service.UserService
+import account.superbe.domain.service.user.UserService
 import account.superbe.infra.UserFactory
 import account.superbe.infra.UserJpaRepository
 import account.superbe.security.JwtTokenProvider
 import account.superbe.security.TokenDto
-import account.superbe.application.dto.UserLoginDto
 import lombok.RequiredArgsConstructor
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 
 @Service
 @RequiredArgsConstructor
-class UserApplicationService (
+class UserApplicationService(
         private val userService: UserService,
         private val userFactory: UserFactory,
         private val userRepo: UserJpaRepository,
         private val passwordEncoder: PasswordEncoder,
         private val tokenProvider: JwtTokenProvider,
         private val tokenClient: TokenClient
-){
+) {
     val log: Logger = LoggerFactory.getLogger(UserApplicationService::class.java)
 
     @Transactional
-    fun createUser(data: UserDto) : Long{
+    fun createUser(data: UserDto): Long {
         val user = userFactory.create(data)
         userRepo.save(user)
         log.info("[createUser] 회원가입 성공 PK = {}", user.userSequence)
@@ -51,7 +51,7 @@ class UserApplicationService (
     @Transactional(readOnly = true)
     fun getAccessToken(refreshToken: String): TokenDto {
         val email = tokenClient.getValues(refreshToken)
-        if(tokenProvider.isRefreshTokenExpired(refreshToken)) {
+        if (tokenProvider.isRefreshTokenExpired(refreshToken)) {
             // TODO: 만료토큰 관리로직 추가 필요
             log.info("[getAccessToken] 만료된 refresh 토큰 = {}", refreshToken)
             throw IllegalArgumentException("만료된 토큰")
