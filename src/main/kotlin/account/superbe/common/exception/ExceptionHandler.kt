@@ -3,12 +3,14 @@ package account.superbe.common.exception
 import account.superbe.common.io.ResponseDto
 import io.sentry.Sentry
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.json.JsonParseException
 import org.springframework.core.env.Environment
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -20,7 +22,7 @@ class ExceptionHandler {
     @Autowired
     lateinit var env: Environment
 
-    @ExceptionHandler(IllegalArgumentException::class, MethodArgumentNotValidException::class)
+    @ExceptionHandler(IllegalArgumentException::class, MethodArgumentNotValidException::class, JsonParseException::class, HttpMessageNotReadableException::class)
     fun handleException(e: Exception): ResponseEntity<ResponseDto<Nothing>> {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
