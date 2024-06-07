@@ -8,3 +8,12 @@ spring:
     password: planbe123#
 server:
   shutdown: graceful
+
+sentry:
+  dsn: https://dff547c8df2459bd903590904a5fd8c7@o4507389505699840.ingest.us.sentry.io/4507389848911872
+  #  exception-resolver-order: -2147483647 # ExceptionHandler 사용설정
+  traces-sample-rate: 1.0 # 전송할 트랜잭션의 양 1 = 100% \
+  max-request-body-size: always # requestBody 캐치 설정
+  logging:
+    minimum-event-level: info # 최소 이벤트 레벨
+    minimum-breadcrumb-level: info # 최소 브래드크럼 레벨

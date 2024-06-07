@@ -1,6 +1,7 @@
 package account.superbe.common.exception
 
 import account.superbe.common.io.ResponseDto
+import io.sentry.Sentry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
 import org.springframework.dao.DataIntegrityViolationException
@@ -29,7 +30,7 @@ class ExceptionHandler {
     @ExceptionHandler(Throwable::class, DataIntegrityViolationException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handle500Exception(e: Exception): ResponseEntity<ResponseDto<Nothing>> {
-        reportErrorToSlack(e.message)
+        Sentry.captureException(e); //sentry 에러 전송
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ResponseDto(message = e.message))
