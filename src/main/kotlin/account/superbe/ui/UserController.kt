@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*
 class UserController(private val userAppService: UserApplicationService, private val userService: UserService) {
     val log: Logger = LoggerFactory.getLogger(UserController::class.java)
 
-    @PostMapping
+    @PostMapping("/join")
     fun createUser(@RequestBody data: UserPostRequest): ResponseDto<Long> {
         log.info("[createUser] 회원가입 email = {}", data.email)
         val user = UserDto(email = data.email, password = data.password, nickname = data.nickname, sex = data.sex, birth = data.birth)
