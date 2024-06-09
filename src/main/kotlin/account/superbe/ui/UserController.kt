@@ -7,8 +7,10 @@ import account.superbe.common.io.ResponseDto
 import account.superbe.domain.service.user.UserService
 import account.superbe.security.TokenDto
 import account.superbe.ui.post.UserPostRequest
+import com.fasterxml.jackson.core.JsonProcessingException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import jakarta.servlet.http.HttpServletResponse
 import lombok.RequiredArgsConstructor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -50,5 +53,12 @@ class UserController(private val userAppService: UserApplicationService, private
     fun getAccessToken(@RequestBody token: TokenDto): ResponseDto<TokenDto> {
         log.info("[getAccessToken] access token 재발급")
         return ResponseDto<TokenDto>(data = userAppService.getAccessToken(token.refreshToken))
+    }
+
+    @GetMapping("/kakao")
+    @Throws(JsonProcessingException::class)
+    fun kakaoCallback(@RequestParam code: String, response: HttpServletResponse): ResponseDto<Long> {
+        log.info("[kakao login] code = {}", code)
+        return ResponseDto(data = userService.kakaoLogin(code, response))
     }
 }
