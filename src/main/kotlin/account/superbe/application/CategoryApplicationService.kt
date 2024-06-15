@@ -45,7 +45,7 @@ class CategoryApplicationService(private val userService: UserService, private v
     @Transactional
     fun deleteCategory(email: String, categorySequence: Long) {
         val user = userService.getUserByEmailNonNull(email)
-        val cnt = categoryRepo.deleteByExpenseSequenceAndUserSequence(categorySequence, user.userSeq!!)
+        val cnt = categoryRepo.deleteByCategorySequenceAndUserSequence(categorySequence, user.userSeq!!)
         if (cnt < 1) {
             log.info("[deleteCategory] 삭제할 데이터 없음, 카테고리 PK = {}, user PK = {}", categorySequence, user.userSeq)
             throw IllegalArgumentException("해당 카테고리를 삭제할 수 없습니다. 카테고리 PK 오류이거나 본인이 작성한 카테고리가 아닙니다.")

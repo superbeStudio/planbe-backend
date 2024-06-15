@@ -4,9 +4,6 @@ import account.superbe.domain.model.Category
 import account.superbe.domain.model.CategoryType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Meta
-import org.springframework.data.jpa.repository.Modifying
-import org.springframework.data.jpa.repository.Query
-import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface CategoryJpaRepository : JpaRepository<Category, Long> {
@@ -15,15 +12,9 @@ interface CategoryJpaRepository : JpaRepository<Category, Long> {
 
     @Meta(comment = "find All by user Sequence and category Type")
     fun findByUserSequenceAndCategoryType(userSequence: Long, categoryType: CategoryType): List<Category>
-
+    
     @Meta(comment = "delete one category by user")
-    @Modifying
-    @Transactional
-    @Query("""
-        delete from Category 
-        where categorySequence = :categorySequence and userSequence = :userSequence
-    """)
-    fun deleteByExpenseSequenceAndUserSequence(categorySequence: Long, userSequence: Long): Int
+    fun deleteByCategorySequenceAndUserSequence(categorySequence: Long, userSequence: Long): Int
 
     @Meta(comment = "find one category by user and category PK")
     fun findByUserSequenceAndCategorySequence(userSequence: Long, categorySequence: Long): Optional<Category>

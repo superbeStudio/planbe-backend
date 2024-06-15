@@ -72,6 +72,7 @@ class ExpenseApplicationService(
         return expenseService.updateExpense(user.userSeq!!, expenseSeq, categorySequence, expenseName, expenseAmount)
     }
 
+    @Transactional
     fun deleteExpense(email: String, expenseSeq: Long) {
         val user = userService.getUserByEmailNonNull(email)
         val cnt = expenseJpaRepository.deleteByExpenseSequenceAndUserSequence(expenseSeq, user.userSeq!!)
