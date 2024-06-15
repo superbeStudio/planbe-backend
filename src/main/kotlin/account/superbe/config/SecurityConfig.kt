@@ -48,7 +48,7 @@ class SecurityConfig(private val jwtFilter: JwtFilter) {
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL)
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL)
 
-        corsConfiguration.allowedOrigins = listOf("http://localhost:3000", "swagger-ui/*", "https://planbe-backend.p-e.kr")
+        corsConfiguration.allowedOrigins = listOf("http://localhost:3000", "swagger-ui/*", "https://planbe-backend.p-e.kr", "http://localhost:3001")
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration)
 
         corsConfiguration.allowCredentials = true
