@@ -1,12 +1,12 @@
 package account.superbe.domain.service.user
 
 import account.superbe.application.dto.UserDto
+import account.superbe.common.client.TokenClient
 import account.superbe.domain.model.Gen
 import account.superbe.domain.model.User
 import account.superbe.infra.UserFactory
 import account.superbe.infra.UserJpaRepository
 import account.superbe.security.JwtTokenProvider
-import account.superbe.security.TokenDto
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletResponse
@@ -32,7 +32,7 @@ import java.util.*
 @Service
 @RequiredArgsConstructor
 class UserService(private val userRepo: UserJpaRepository, private val userFactory: UserFactory, private val jwtTokenProvider: JwtTokenProvider,
-                  private val authenticationManagerBuilder: AuthenticationManagerBuilder) {
+                  private val authenticationManagerBuilder: AuthenticationManagerBuilder, private val tokenClient: TokenClient) {
     val log: Logger = LoggerFactory.getLogger(UserService::class.java)
 
     fun getUserByEmailNonNull(email: String): UserDto {
@@ -64,9 +64,7 @@ class UserService(private val userRepo: UserJpaRepository, private val userFacto
 
         val refreshToken: String = jwtTokenProvider.generateToken(authentication).refreshToken
 
-//        redisService.setValues(refreshToken, kakaoUser.email())
-
-//        kakaoUserInfo.setToken(jwtTokenProvider.generateToken(authentication))
+        tokenClient.setValues(refreshToken, kakaoUser.email)
 
         return kakaoUserInfo.userSeq!!
     }
@@ -137,15 +135,7 @@ class UserService(private val userRepo: UserJpaRepository, private val userFacto
     private fun registerKakaoUserIfNeed(kakaoUserInfo: UserDto): User {
         // DB 에 중복된 email이 있는지 확인
         val email: String = kakaoUserInfo.email
-        val nickname: String = kakaoUserInfo.nickname
-        var kakaoUser = userRepo.findByEmail(email).orElse(null)
-
-        if (kakaoUser == null) {
-            kakaoUser = userFactory.create(kakaoUserInfo)
-
-            userRepo.save(kakaoUser)
-        }
-        return kakaoUser
+        return userRepo.findByEmail(email).orElse(userFactory.create(kakaoUserInfo))
     }
 
     private fun forceLogin(kakaoUser: User): Authentication {
@@ -153,12 +143,5 @@ class UserService(private val userRepo: UserJpaRepository, private val userFacto
         val authentication: Authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
         SecurityContextHolder.getContext().authentication = authentication
         return authentication
-    }
-
-    // 5. response Header에 JWT 토큰 추가
-    private fun kakaoUsersAuthorizationInput(authentication: Authentication, response: HttpServletResponse) {
-        // response header에 token 추가
-        val token: TokenDto = jwtTokenProvider.generateToken(authentication)
-        response.addHeader("Authorization", "BEARER $token")
     }
 }
