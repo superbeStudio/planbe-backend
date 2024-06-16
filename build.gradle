@@ -66,6 +66,10 @@ dependencies {
     //auth0
     implementation("com.auth0:auth0-spring-security-api:1.5.2")
     implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.3.4.RELEASE")
+
+    //test 코드용 h2 DB
+    implementation 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
 tasks.withType(KotlinCompile) {
